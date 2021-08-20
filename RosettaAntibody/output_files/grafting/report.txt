@@ -1,0 +1,641 @@
+SCS_MultiTemplate( multi_template_regions = [orientation, ] ) resutls:
+Template №0
+	h1
+		pdb: 2xzc
+		padded: 0
+		structure source: -
+		light type iso-type: -
+		bio type: -
+
+	h2
+		pdb: 2xzc
+		padded: 0
+		structure source: -
+		light type iso-type: -
+		bio type: -
+
+	h3
+		pdb: 4ztp
+		padded: 0
+		structure source: -
+		light type iso-type: -
+		bio type: -
+
+	l1
+		pdb: 1w72
+		padded: 0
+		structure source: -
+		light type iso-type: -
+		bio type: -
+
+	l2
+		pdb: 4npy
+		padded: 0
+		structure source: -
+		light type iso-type: -
+		bio type: -
+
+	l3
+		pdb: 4wuk
+		padded: 0
+		structure source: -
+		light type iso-type: -
+		bio type: -
+
+	frh
+		pdb: 3zl4
+		padded: 0
+		structure source: -
+		light type iso-type: -
+		bio type: -
+
+	frl
+		pdb: 4npy
+		padded: 0
+		structure source: -
+		light type iso-type: -
+		bio type: -
+
+	orientation
+		pdb: 4npy
+		padded: 0
+		structure source: -
+		light type iso-type: -
+		bio type: -
+
+Template №1
+	h1
+		pdb: 2xzc
+		padded: 0
+		structure source: -
+		light type iso-type: -
+		bio type: -
+
+	h2
+		pdb: 2xzc
+		padded: 0
+		structure source: -
+		light type iso-type: -
+		bio type: -
+
+	h3
+		pdb: 4ztp
+		padded: 0
+		structure source: -
+		light type iso-type: -
+		bio type: -
+
+	l1
+		pdb: 1w72
+		padded: 0
+		structure source: -
+		light type iso-type: -
+		bio type: -
+
+	l2
+		pdb: 4npy
+		padded: 0
+		structure source: -
+		light type iso-type: -
+		bio type: -
+
+	l3
+		pdb: 4wuk
+		padded: 0
+		structure source: -
+		light type iso-type: -
+		bio type: -
+
+	frh
+		pdb: 3zl4
+		padded: 0
+		structure source: -
+		light type iso-type: -
+		bio type: -
+
+	frl
+		pdb: 4npy
+		padded: 0
+		structure source: -
+		light type iso-type: -
+		bio type: -
+
+	orientation
+		pdb: 3zl4
+		padded: 0
+		structure source: -
+		light type iso-type: -
+		bio type: -
+
+Template №2
+	h1
+		pdb: 2xzc
+		padded: 0
+		structure source: -
+		light type iso-type: -
+		bio type: -
+
+	h2
+		pdb: 2xzc
+		padded: 0
+		structure source: -
+		light type iso-type: -
+		bio type: -
+
+	h3
+		pdb: 4ztp
+		padded: 0
+		structure source: -
+		light type iso-type: -
+		bio type: -
+
+	l1
+		pdb: 1w72
+		padded: 0
+		structure source: -
+		light type iso-type: -
+		bio type: -
+
+	l2
+		pdb: 4npy
+		padded: 0
+		structure source: -
+		light type iso-type: -
+		bio type: -
+
+	l3
+		pdb: 4wuk
+		padded: 0
+		structure source: -
+		light type iso-type: -
+		bio type: -
+
+	frh
+		pdb: 3zl4
+		padded: 0
+		structure source: -
+		light type iso-type: -
+		bio type: -
+
+	frl
+		pdb: 4npy
+		padded: 0
+		structure source: -
+		light type iso-type: -
+		bio type: -
+
+	orientation
+		pdb: 2xzc
+		padded: 0
+		structure source: -
+		light type iso-type: -
+		bio type: -
+
+Template №3
+	h1
+		pdb: 2xzc
+		padded: 0
+		structure source: -
+		light type iso-type: -
+		bio type: -
+
+	h2
+		pdb: 2xzc
+		padded: 0
+		structure source: -
+		light type iso-type: -
+		bio type: -
+
+	h3
+		pdb: 4ztp
+		padded: 0
+		structure source: -
+		light type iso-type: -
+		bio type: -
+
+	l1
+		pdb: 1w72
+		padded: 0
+		structure source: -
+		light type iso-type: -
+		bio type: -
+
+	l2
+		pdb: 4npy
+		padded: 0
+		structure source: -
+		light type iso-type: -
+		bio type: -
+
+	l3
+		pdb: 4wuk
+		padded: 0
+		structure source: -
+		light type iso-type: -
+		bio type: -
+
+	frh
+		pdb: 3zl4
+		padded: 0
+		structure source: -
+		light type iso-type: -
+		bio type: -
+
+	frl
+		pdb: 4npy
+		padded: 0
+		structure source: -
+		light type iso-type: -
+		bio type: -
+
+	orientation
+		pdb: 2xza
+		padded: 0
+		structure source: -
+		light type iso-type: -
+		bio type: -
+
+Template №4
+	h1
+		pdb: 2xzc
+		padded: 0
+		structure source: -
+		light type iso-type: -
+		bio type: -
+
+	h2
+		pdb: 2xzc
+		padded: 0
+		structure source: -
+		light type iso-type: -
+		bio type: -
+
+	h3
+		pdb: 4ztp
+		padded: 0
+		structure source: -
+		light type iso-type: -
+		bio type: -
+
+	l1
+		pdb: 1w72
+		padded: 0
+		structure source: -
+		light type iso-type: -
+		bio type: -
+
+	l2
+		pdb: 4npy
+		padded: 0
+		structure source: -
+		light type iso-type: -
+		bio type: -
+
+	l3
+		pdb: 4wuk
+		padded: 0
+		structure source: -
+		light type iso-type: -
+		bio type: -
+
+	frh
+		pdb: 3zl4
+		padded: 0
+		structure source: -
+		light type iso-type: -
+		bio type: -
+
+	frl
+		pdb: 4npy
+		padded: 0
+		structure source: -
+		light type iso-type: -
+		bio type: -
+
+	orientation
+		pdb: 1w72
+		padded: 0
+		structure source: -
+		light type iso-type: -
+		bio type: -
+
+Template №5
+	h1
+		pdb: 2xzc
+		padded: 0
+		structure source: -
+		light type iso-type: -
+		bio type: -
+
+	h2
+		pdb: 2xzc
+		padded: 0
+		structure source: -
+		light type iso-type: -
+		bio type: -
+
+	h3
+		pdb: 4ztp
+		padded: 0
+		structure source: -
+		light type iso-type: -
+		bio type: -
+
+	l1
+		pdb: 1w72
+		padded: 0
+		structure source: -
+		light type iso-type: -
+		bio type: -
+
+	l2
+		pdb: 4npy
+		padded: 0
+		structure source: -
+		light type iso-type: -
+		bio type: -
+
+	l3
+		pdb: 4wuk
+		padded: 0
+		structure source: -
+		light type iso-type: -
+		bio type: -
+
+	frh
+		pdb: 3zl4
+		padded: 0
+		structure source: -
+		light type iso-type: -
+		bio type: -
+
+	frl
+		pdb: 4npy
+		padded: 0
+		structure source: -
+		light type iso-type: -
+		bio type: -
+
+	orientation
+		pdb: 3uls
+		padded: 0
+		structure source: -
+		light type iso-type: -
+		bio type: -
+
+Template №6
+	h1
+		pdb: 2xzc
+		padded: 0
+		structure source: -
+		light type iso-type: -
+		bio type: -
+
+	h2
+		pdb: 2xzc
+		padded: 0
+		structure source: -
+		light type iso-type: -
+		bio type: -
+
+	h3
+		pdb: 4ztp
+		padded: 0
+		structure source: -
+		light type iso-type: -
+		bio type: -
+
+	l1
+		pdb: 1w72
+		padded: 0
+		structure source: -
+		light type iso-type: -
+		bio type: -
+
+	l2
+		pdb: 4npy
+		padded: 0
+		structure source: -
+		light type iso-type: -
+		bio type: -
+
+	l3
+		pdb: 4wuk
+		padded: 0
+		structure source: -
+		light type iso-type: -
+		bio type: -
+
+	frh
+		pdb: 3zl4
+		padded: 0
+		structure source: -
+		light type iso-type: -
+		bio type: -
+
+	frl
+		pdb: 4npy
+		padded: 0
+		structure source: -
+		light type iso-type: -
+		bio type: -
+
+	orientation
+		pdb: 4gsd
+		padded: 0
+		structure source: -
+		light type iso-type: -
+		bio type: -
+
+Template №7
+	h1
+		pdb: 2xzc
+		padded: 0
+		structure source: -
+		light type iso-type: -
+		bio type: -
+
+	h2
+		pdb: 2xzc
+		padded: 0
+		structure source: -
+		light type iso-type: -
+		bio type: -
+
+	h3
+		pdb: 4ztp
+		padded: 0
+		structure source: -
+		light type iso-type: -
+		bio type: -
+
+	l1
+		pdb: 1w72
+		padded: 0
+		structure source: -
+		light type iso-type: -
+		bio type: -
+
+	l2
+		pdb: 4npy
+		padded: 0
+		structure source: -
+		light type iso-type: -
+		bio type: -
+
+	l3
+		pdb: 4wuk
+		padded: 0
+		structure source: -
+		light type iso-type: -
+		bio type: -
+
+	frh
+		pdb: 3zl4
+		padded: 0
+		structure source: -
+		light type iso-type: -
+		bio type: -
+
+	frl
+		pdb: 4npy
+		padded: 0
+		structure source: -
+		light type iso-type: -
+		bio type: -
+
+	orientation
+		pdb: 3go1
+		padded: 0
+		structure source: -
+		light type iso-type: -
+		bio type: -
+
+Template №8
+	h1
+		pdb: 2xzc
+		padded: 0
+		structure source: -
+		light type iso-type: -
+		bio type: -
+
+	h2
+		pdb: 2xzc
+		padded: 0
+		structure source: -
+		light type iso-type: -
+		bio type: -
+
+	h3
+		pdb: 4ztp
+		padded: 0
+		structure source: -
+		light type iso-type: -
+		bio type: -
+
+	l1
+		pdb: 1w72
+		padded: 0
+		structure source: -
+		light type iso-type: -
+		bio type: -
+
+	l2
+		pdb: 4npy
+		padded: 0
+		structure source: -
+		light type iso-type: -
+		bio type: -
+
+	l3
+		pdb: 4wuk
+		padded: 0
+		structure source: -
+		light type iso-type: -
+		bio type: -
+
+	frh
+		pdb: 3zl4
+		padded: 0
+		structure source: -
+		light type iso-type: -
+		bio type: -
+
+	frl
+		pdb: 4npy
+		padded: 0
+		structure source: -
+		light type iso-type: -
+		bio type: -
+
+	orientation
+		pdb: 1qlr
+		padded: 0
+		structure source: -
+		light type iso-type: -
+		bio type: -
+
+Template №9
+	h1
+		pdb: 2xzc
+		padded: 0
+		structure source: -
+		light type iso-type: -
+		bio type: -
+
+	h2
+		pdb: 2xzc
+		padded: 0
+		structure source: -
+		light type iso-type: -
+		bio type: -
+
+	h3
+		pdb: 4ztp
+		padded: 0
+		structure source: -
+		light type iso-type: -
+		bio type: -
+
+	l1
+		pdb: 1w72
+		padded: 0
+		structure source: -
+		light type iso-type: -
+		bio type: -
+
+	l2
+		pdb: 4npy
+		padded: 0
+		structure source: -
+		light type iso-type: -
+		bio type: -
+
+	l3
+		pdb: 4wuk
+		padded: 0
+		structure source: -
+		light type iso-type: -
+		bio type: -
+
+	frh
+		pdb: 3zl4
+		padded: 0
+		structure source: -
+		light type iso-type: -
+		bio type: -
+
+	frl
+		pdb: 4npy
+		padded: 0
+		structure source: -
+		light type iso-type: -
+		bio type: -
+
+	orientation
+		pdb: 1dn0
+		padded: 0
+		structure source: -
+		light type iso-type: -
+		bio type: -
+

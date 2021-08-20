@@ -1,0 +1,42 @@
+<ROSETTASCRIPTS>
+<TASKOPERATIONS>
+	<ProteinInterfaceDesign name="pido_far" interface_distance_cutoff="15.0"/>
+	<ProteinInterfaceDesign name="pido_med" interface_distance_cutoff="12.0"/>
+	<ProteinInterfaceDesign name="pido_near" interface_distance_cutoff="8.0"/>
+	<OperateOnCertainResidues name="hotspot_repack">
+		<ResiduePDBInfoHasLabel property="HOTSPOT"/>
+		<RestrictToRepackingRLT/>
+	</OperateOnCertainResidues>
+	<SelectBySASA name="core" mode="sc" state="bound" probe_radius="2.2" core_asa="0" surface_asa="30" core="1" boundary="0" surface="0"/>
+	<SelectBySASA name="core_and_boundary"  mode="sc" state="bound" probe_radius="2.2" core_asa="0" surface_asa="30" core="1" boundary="1" surface="0"/>
+</TASKOPERATIONS>
+<SCOREFXNS>
+</SCOREFXNS>
+<FILTERS>
+	<Ddg name="ddg" confidence="0"/>
+	<BuriedUnsatHbonds name="unsat" confidence="0"/>
+	<ShapeComplementarity name="Sc" confidence="0"/>
+</FILTERS>
+<MOVERS>
+	<MotifGraft name="motif_grafting" context_structure="context.pdb" motif_structure="motif.pdb" RMSD_tolerance="1.0" NC_points_RMSD_tolerance="1.0" 
+	 clash_score_cutoff="5" clash_test_residue="GLY" hotspots="3:7" combinatory_fragment_size_delta="2:2" max_fragment_replacement_size_delta="-8:8" full_motif_bb_alignment="0" graft_only_hotspots_by_replacement="0"/>
+	 <build_Ala_pose name="ala_pose" partner1="0" partner2="1" interface_cutoff_distance="8.0" task_operations="hotspot_repack"/>
+	 <Prepack name="ppk" jump_number="0"/>
+	 <PackRotamersMover name="design_core" task_operations="hotspot_repack,pido_far,core"/>
+	 <PackRotamersMover name="design_boundary" task_operations="hotspot_repack,pido_med,core_and_boundary"/>
+	 <PackRotamersMover name="design_interface" task_operations="hotspot_repack,pido_near"/>
+	 <MinMover name="sc_min" bb="0" chi="1" jump="1"/>
+</MOVERS>
+<PROTOCOLS>
+	<Add mover_name="motif_grafting"/>
+	<Add mover_name="ala_pose"/>
+	<Add mover_name="ppk"/>
+	<Add mover_name="design_core"/>
+	<Add mover_name="design_boundary"/>
+	<Add mover_name="design_interface"/>
+	<Add mover_name="sc_min"/>
+	<Add filter_name="unsat"/>
+	<Add filter_name="ddg"/>
+	<Add filter_name="Sc"/>
+</PROTOCOLS>
+</ROSETTASCRIPTS>

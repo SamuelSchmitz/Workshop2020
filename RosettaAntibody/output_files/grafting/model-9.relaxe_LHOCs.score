@@ -1,0 +1,3 @@
+SEQUENCE: 
+SCORE: total_score H1_length H2_length H3_length L1_length L2_length L3_length VL_VH_distance VL_VH_opening_angle VL_VH_opposite_opening_angle VL_VH_packing_angle description 
+SCORE:       0.000    11.000    16.000    15.000    11.000     7.000    11.000         14.527             101.082                       98.309             -53.762 model-9.relaxed_0001

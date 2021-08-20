@@ -1,0 +1,6 @@
+-linmem_ig 100				# limit memory to store rotamer pair interactions
+-use_input_sc				# Include rotamers from the input structure
+-nstruct 1				# Generate 1 model
+-relax:fast				# Do a small cycle number fast relax
+-relax:constrain_relax_to_start_coords	# Add coordinate constraints to backbone heavy atoms, based on the input structure.
+-scorefile relax.fasc

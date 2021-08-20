@@ -1,0 +1,5 @@
+-linmem_ig 100						# limit memory to store rotamer pair interactions
+-use_input_sc						# Include rotamers from the input structure
+-nstruct 10						# Generate 10 models
+-mute protocols.simple_moves.GenericMonteCarloMover	# Mute the output from the GenericMonteCarloMover
+-ex1

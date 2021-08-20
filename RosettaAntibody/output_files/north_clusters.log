@@ -1,0 +1,4 @@
+SEQUENCE: 
+SCORE: total_score H1_cluster H1_distance H2_cluster H2_distance H3_cluster H3_distance L1_cluster L1_distance L2_cluster L2_distance L3_cluster L3_distance description 
+SCORE:       0.000    H1-14-1     36.7556     H2-9-1     9.24639    H3-17-1     61.3039    L1-11-3     11.6678     L2-8-1     40.4629    L3-11-1     15.1125 model-0.relaxed_0001
+SCORE:       0.000    H1-14-1     51.8793     H2-9-1     9.65025    H3-17-1     58.6289     L2-8-5     40.6937    L3-11-1     16.7952         NA         nan model-0.relaxed_0001

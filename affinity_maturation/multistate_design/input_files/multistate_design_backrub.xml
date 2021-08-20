@@ -1,0 +1,59 @@
+<ROSETTASCRIPTS>
+	<SCOREFXNS>
+		<talaris_cst weights=talaris2014.wts >
+			<Reweight scoretype=res_type_constraint weight=1.0 />
+		</talaris_cst>
+	</SCOREFXNS>
+	<TASKOPERATIONS>
+		Include rotamer options from the command line
+		<InitializeFromCommandline name=ifcl />
+	</TASKOPERATIONS>
+	<MOVERS>
+		Design mover to be used in multistate design
+		<PackRotamersMover name=design scorefxn=talaris_cst task_operations=ifcl />
+		
+		Create MSDMovers to run multistate design - these different in the constraint weight, with later rounds
+		having a higher constraint value
+		<MSDMover name=msd1 design_mover=design constraint_weight=0.5 resfiles=4HKX.resfile,3UBQ.resfile />
+		<MSDMover name=msd2 design_mover=design constraint_weight=1 resfiles=4HKX.resfile,3UBQ.resfile/>
+		<MSDMover name=msd3 design_mover=design constraint_weight=1.5 resfiles=4HKX.resfile,3UBQ.resfile />
+		<MSDMover name=msd4 design_mover=design constraint_weight=2 resfiles=4HKX.resfile,3UBQ.resfile />	
+
+		FindConsensusSequence is needed at the end of the protocol to find a single sequence
+		that agrees with all target states
+		<FindConsensusSequence name=finish scorefxn=talaris_cst resfiles=4HKX.resfile,3UBQ.resfile />
+
+		Backrub motions of the antibody
+		<Backrub name=backrub_motion pivot_residues=1-224 />
+		<GenericMonteCarlo name=backrub mover_name=backrub_motion scorefxn_name=talaris2014 trials=500 temperature=1.0 recover_low=1 />
+
+		Analyze the resulting interface
+		<InterfaceAnalyzerMover name=analyze scorefxn=talaris2014 packstat=0 pack_input=0 pack_separated=1 fixedchains=H,L />
+	</MOVERS>
+	<FILTERS>
+	</FILTERS>
+	<APPLY_TO_POSE>
+	</APPLY_TO_POSE>
+	<PROTOCOLS>
+		Run four rounds of design followed by backbone motion
+		<Add mover=msd1 />
+		<Add mover=backrub />
+		
+		<Add mover=msd2 />
+		<Add mover=backrub />
+		
+		<Add mover=msd3 />
+		<Add mover=backrub />
+		
+		<Add mover=msd4 />
+		<Add mover=backrub />
+		
+		Find a consensus sequence for all states
+		<Add mover=finish />
+
+		Calculate interface metrics for the final sequence
+		<Add mover=analyze />
+
+	</PROTOCOLS>
+	<OUTPUT scorefxn=talaris2014 />
+</ROSETTASCRIPTS>

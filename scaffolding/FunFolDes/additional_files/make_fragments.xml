@@ -1,0 +1,24 @@
+<ROSETTASCRIPTS>
+  <RESIDUE_SELECTORS>
+    # Selectors to clean up what we will not use of the scaffold.
+    <Index name="TMP" resnums="10A-105A" />
+    <Not name="!TMP" selector="TMP" />
+    <ProteinResidueSelector name="PROTEIN" />
+    <Not name="!PROTEIN" selector="PROTEIN" />
+    <Or name="!TMP_OR_PROT" selectors="!TMP,!PROTEIN" />
+  </RESIDUE_SELECTORS>
+  <MOVERS>
+    <DeleteRegionMover name="delete" residue_selector="!TMP_OR_PROT" />
+    <StructFragmentMover name="FragmentPicker"
+        prefix="wauto"
+        vall_file="vall.jul19.2011.gz"
+        output_frag_files="1"
+        small_frag_file="wauto.200.3mers"
+        large_frag_file="wauto.200.9mers"
+        frag_weight_file="scores.cfg" />
+  </MOVERS>
+  <PROTOCOLS>
+    <Add mover="delete" />
+    <Add mover="FragmentPicker" />
+  </PROTOCOLS>
+</ROSETTASCRIPTS>

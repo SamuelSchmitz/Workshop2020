@@ -1,0 +1,20 @@
+# BLASTP 2.7.1+
+# Query: grafting/l3.fasta
+# Database: /usr/people/sbioguest/rosetta_workshop/rosetta/tools/antibody//blast_database/database.L3.11
+# Fields: query acc.ver, subject acc.ver, % identity, alignment length, mismatches, gap opens, q. start, q. end, s. start, s. end, evalue, bit score
+# 14 hits found
+grafting/l3.fasta	pdb4m5y_chothia.pdb	100.000	11	0	0	1	11	1	11	2.46e-05	24.4
+grafting/l3.fasta	pdb1adq_chothia.pdb	72.727	11	3	0	1	11	1	11	0.002	19.3
+grafting/l3.fasta	pdb4wuk_chothia.pdb	54.545	11	5	0	1	11	1	11	0.028	16.3
+grafting/l3.fasta	pdb3sm5_chothia.pdb	54.545	11	5	0	1	11	1	11	0.028	16.3
+grafting/l3.fasta	pdb3q6f_chothia.pdb	54.545	11	5	0	1	11	1	11	0.033	16.3
+grafting/l3.fasta	pdb3piq_chothia.pdb	54.545	11	5	0	1	11	1	11	0.033	16.3
+grafting/l3.fasta	pdb1w72_chothia.pdb	63.636	11	4	0	1	11	1	11	0.048	15.9
+grafting/l3.fasta	pdb3q6g_chothia.pdb	45.455	11	6	0	1	11	1	11	0.15	14.6
+grafting/l3.fasta	pdb4bjl_chothia.pdb	66.667	9	3	0	3	11	3	11	1.1	12.5
+grafting/l3.fasta	pdb3bjl_chothia.pdb	66.667	9	3	0	3	11	3	11	1.1	12.5
+grafting/l3.fasta	pdb1bjm_chothia.pdb	66.667	9	3	0	3	11	3	11	1.1	12.5
+grafting/l3.fasta	pdb4nzt_chothia.pdb	50.000	10	5	0	2	11	2	11	4.6	10.8
+grafting/l3.fasta	pdb5cjq_chothia.pdb	50.000	10	5	0	2	11	2	11	4.6	10.8
+grafting/l3.fasta	pdb2xwt_chothia.pdb	44.444	9	5	0	3	11	3	11	19	 9.5
+# BLAST processed 1 queries

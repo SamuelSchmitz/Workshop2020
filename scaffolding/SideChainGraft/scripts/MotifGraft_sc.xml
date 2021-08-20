@@ -1,0 +1,35 @@
+<ROSETTASCRIPTS>
+	<TASKOPERATIONS>
+		<ProteinInterfaceDesign  name="pido"  repack_chain1="1" repack_chain2="1" design_chain1="0" design_chain2="1" interface_distance_cutoff="8.0"/>
+		<OperateOnCertainResidues name="hotspot_repack">
+		<ResiduePDBInfoHasLabel property="HOTSPOT"/>
+		<RestrictToRepackingRLT/>
+		</OperateOnCertainResidues>
+	</TASKOPERATIONS>
+	<SCOREFXNS>
+	</SCOREFXNS>
+	<FILTERS>
+		<Ddg name="ddg" confidence="0"/>
+		<BuriedUnsatHbonds name="unsat" confidence="0"/>
+		<ShapeComplementarity name="Sc" confidence="0"/>
+	</FILTERS>
+	<MOVERS>
+		<MotifGraft name="motif_grafting" context_structure="context.pdb" motif_structure="motif.pdb" RMSD_tolerance="0.3" NC_points_RMSD_tolerance="0.5" 
+		 clash_score_cutoff="5" clash_test_residue="GLY" hotspots="3:7" combinatory_fragment_size_delta="2:2" full_motif_bb_alignment="1" graft_only_hotspots_by_replacement="1" revert_graft_to_native_sequence="1"/>
+		<build_Ala_pose name="ala_pose" partner1="0" partner2="1" interface_cutoff_distance="8.0" task_operations="hotspot_repack"/>
+		<Prepack name="ppk" jump_number="0"/>
+		<PackRotamersMover name="design" task_operations="hotspot_repack,pido"/>
+		<MinMover name="rb_min" bb="0" chi="1" jump="1"/>
+	</MOVERS>
+	<PROTOCOLS>
+		<Add mover_name="motif_grafting"/>
+		<Add mover_name="ala_pose"/>
+		<Add mover_name="ppk"/>
+		<Add mover_name="design"/>
+		<Add mover_name="rb_min"/>
+		<Add mover_name="design"/>
+		<Add filter_name="unsat"/>
+		<Add filter_name="ddg"/>
+		<Add filter_name="Sc"/>
+	</PROTOCOLS>
+</ROSETTASCRIPTS>

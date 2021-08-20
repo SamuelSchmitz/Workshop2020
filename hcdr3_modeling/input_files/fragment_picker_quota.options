@@ -1,0 +1,29 @@
+# Input databases
+-in:file:vall /usr/people/molgraph/rosetta_workshop/rosetta/tools/fragment_tools/vall.jul19.2011.gz
+
+#Query-related input files
+-in:file:checkpoint 4m5y_.checkpoint
+-in:file:fasta 4m5y_.fasta
+-frags:ss_pred 4m5y_.psipred_ss2 psipred 4m5y_.jufo_ss jufo
+
+# the name root for the output fragment files
+-out:file:frag_prefix	4m5y_frags
+
+# Show score components for each selected fragment
+-frags:describe_fragments 4m5y_frags.fsc
+
+# Weights file
+-frags:scoring:config ./fragment_picker_quota.wghts
+
+# we need nine-mers and three-mers
+-frags:frag_sizes 9 3
+
+# Select 200 fragments from 1000 candidates. We need more candidates than fragments to fill quota pools.	
+-frags:n_candidates 1000
+-frags:n_frags 200
+
+# Quota.def file defines the shares between different quota pools. The total should be 1.0
+-frags:picking:quota_config_file ./fragment_picker_quota.cfg
+
+# Get rid of homologous fragments
+-frags:denied_pdb 4m5y_.homolog_vall

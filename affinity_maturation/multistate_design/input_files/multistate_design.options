@@ -1,0 +1,7 @@
+-linmem_ig 100										# limit memory to store rotamer pair interactions
+-use_input_sc										# Include rotamers from the input structure
+-ex1
+-nstruct 10											# Generate 10 models
+-s 4HKX_relax.pdb 3UBQ_relax.pdb					# Use structure 4HKX as input
+-mute protocols.simple_moves.GenericMonteCarloMover	# Mute the output from the GenericMonteCarloMover
+-recon:randomize					# Randomize order of input PDBs in multistate design

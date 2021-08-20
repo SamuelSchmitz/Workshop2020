@@ -1,0 +1,35 @@
+<ROSETTASCRIPTS>
+	<SCOREFXNS>
+	</SCOREFXNS>
+	<TASKOPERATIONS>
+		Include rotamer options from the command line
+		<InitializeFromCommandline name="ifcl" />
+		Design and repack residues based on resfile
+		<ReadResfile name="rrf" filename="4HKX_control.resfile"/>
+	</TASKOPERATIONS>
+	<MOVERS>
+		Design the antibody
+		<PackRotamersMover name="design" scorefxn="REF2015" task_operations="ifcl,rrf" />
+
+		Analyze the resulting interface
+		<InterfaceAnalyzerMover name="analyze" scorefxn="REF2015" packstat="0" pack_input="0" pack_separated="1" fixedchains="H,L" />
+	</MOVERS>
+	<FILTERS>
+	</FILTERS>
+	<APPLY_TO_POSE>
+	</APPLY_TO_POSE>
+	<PROTOCOLS>
+		Design the antibody - use four rounds of design to mimic the multistate design protocol
+		<Add mover="design" />
+		
+		<Add mover="design" />
+
+		<Add mover="design" />
+
+		<Add mover="design" />
+
+		Calculate interface metrics for the final sequence
+		<Add mover="analyze" />
+	</PROTOCOLS>
+	<OUTPUT scorefxn="REF2015" />
+</ROSETTASCRIPTS>

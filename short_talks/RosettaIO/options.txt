@@ -1,0 +1,23 @@
+## this is a comment
+
+
+-in:file:
+	-fasta ./input_files/1e1wA.fasta ## input sequence file
+	-native ./input_files/1e1w.pdb ## In many cases, you wouldn't have a reference structure (that's why you're trying to do ab initio prediction), but here we use a known case where we can compare our output structures to the "native" experimentally-determined structure deposited in the Protein DataBank.
+	-frag3 ./input_files/aat000_03_05.200_v1_3 ## 3mer fragment generated using Robetta Fragment Server given the 1e1wA.fasta file. 
+	-frag9 ./input_files/aat000_09_05.200_v1_3 ## 9mer fragment generated using Robetta Fragment Server given the 1e1wA.fasta file.
+	-psipred_ss2 ./input_files/t000_.psipred_ss2 ## Secondary structure prediction file generated using Robetta Fragment Server given the 1e1wA.fasta file. 
+## The fragment files are large ASCII files containing extracted 3 or 9-mer fragments of proteins from the PDB. The .psipred_ss2 file is a short file given the probabilities of each residue being part of an alpha helix(H), beta sheet(E) or loop(C). These files have been pre-generated for you to save time and not overwhelm the server. It is simple to go through how to submit jobs if you're interested, but for now I would highly suggest looking through these files to get a feel for what information is there. 
+
+## This section sets the user-defined settings for the Abinitio application. These values have been benchmarked by Rosetta developers and optimized for this case. Generally the default settings work well and once you get a handle on your particular system, you could change some of the settings for your runs. 
+-abinitio:relax 
+-relax:fast ## We want to run FastRelax
+-abinitio::increase_cycles 10
+-abinitio::rg_reweight 0.5
+-abinitio::rsd_wt_helix 0.5
+-abinitio::rsd_wt_loop 0.5
+-abinitio::use_filters true
+-kill_hairpins
+
+-out:file:silent ./output_files/1e1wA_silent.out ## Name of the output silent file--this is a Rosetta-specific way to output a bunch of PDBs into one file. If you want outputs to be in PDB format, you can comment out this line and use either the -out:pdb or -out:pdb_gz option. 
+-nstruct 10 ## How many models you want to make. This number will normally be much higher depending on what the user is looking to answer. It is not uncommon for this number to be anywhere from 1K-100K models.

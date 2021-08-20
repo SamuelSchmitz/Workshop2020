@@ -1,0 +1,216 @@
+<ROSETTASCRIPTS>
+
+  <SCOREFXNS>
+    # A weight is added to small-range hbonds to favor helix formation.
+    <ScoreFunction name="fullatom" weights="ref2015">
+      <Reweight scoretype="hbond_sr_bb"          weight="1.6" />
+      <Reweight scoretype="atom_pair_constraint" weight="1.6" />
+    </ScoreFunction>
+  </SCOREFXNS>
+
+  <RESIDUE_SELECTORS>
+    # Standard FFD ResidueSelectors.
+    <ResiduePDBInfoHasLabel name="MOTIF"     property="MOTIF" />
+    <Not                    name="!MOTIF"    selector="MOTIF" />
+    <ResiduePDBInfoHasLabel name="TEMPLATE"  property="TEMPLATE" />
+    <Not                    name="!TEMPLATE" selector="TEMPLATE" />
+    <ResiduePDBInfoHasLabel name="CONTEXT"   property="CONTEXT" />
+    <Not                    name="!CONTEXT"  selector="CONTEXT" />
+    <ResiduePDBInfoHasLabel name="FLEXIBLE"  property="FLEXIBLE" />
+    <Not                    name="!FLEXIBLE" selector="FLEXIBLE" />
+    <ResiduePDBInfoHasLabel name="HOTSPOT"   property="HOTSPOT" />
+    <Not                    name="!HOTSPOT"  selector="HOTSPOT" />
+    <ResiduePDBInfoHasLabel name="COLDSPOT"  property="COLDSPOT" />
+    <Not                    name="!COLDSPOT" selector="COLDSPOT" />
+
+    <And name="FLEXIBLE_AND_MOTIF" selectors="FLEXIBLE,MOTIF" />
+    <And name="COLDSPOT_AND_MOTIF" selectors="COLDSPOT,MOTIF" />
+    <And name="HOTSPOT_AND_MOTIF"  selectors="HOTSPOT,MOTIF" />
+
+    <Or name="COLDSPOT_OR_TEMPLATE"
+                                   selectors="COLDSPOT,TEMPLATE" />
+    <Or name="FLEXIBLE_OR_TEMPLATE"
+                                   selectors="FLEXIBLE,TEMPLATE" />
+    <Or name="CONTEXT_OR_FLEXIBLE_OR_TEMPLATE"
+                                   selectors="CONTEXT,FLEXIBLE,TEMPLATE" />
+    <Or name="COLDSPOT_OR_FLEXIBLE_OR_TEMPLATE"
+                                   selectors="COLDSPOT,FLEXIBLE,TEMPLATE" />
+    <Or name="COLDSPOT_OR_CONTEXT_OR_FLEXIBLE_OR_TEMPLATE"
+                                   selectors="COLDSPOT,CONTEXT,FLEXIBLE,TEMPLATE" />
+    <Or name="HOTSPOT_OR_CONTEXT"
+                                   selectors="HOTSPOT,CONTEXT" />
+    <And name="HOTSPOT_OR_CONTEXT_AND_!FLEXIBLE"
+                                   selectors="HOTSPOT_OR_CONTEXT,!FLEXIBLE" />
+    <And name="FLEXIBLE_AND_!COLDSPOT"
+                                   selectors="FLEXIBLE,!COLDSPOT" />
+
+    <ProteinResidueSelector name="PROTEIN" />
+    <Not name="!PROTEIN" selector="PROTEIN" />
+
+    ## TEMPLATE (1kx8)
+    ### usable template
+    <Index name="template" resnums="1-99" />
+    <Not name="!template" selector="template" />
+    ### acceptor point
+    <Index name="acceptor" resnums="69-90" />
+
+    ## MOTIF (3ixt)
+    ### donor
+    <Index name="donor" resnums="255C-276C" />
+    <Chain name="target" chains="A,B" />
+
+    ### Design
+    <Chain name="design" chains="C" />
+  </RESIDUE_SELECTORS>
+
+  <MOVE_MAP_FACTORIES>
+    # Standard FunFolDes MoveMap
+    <MoveMapFactory name="FFDSTANDARD_MOVEMAP"
+            bb="false" chi="false" nu="false" branches="false" jumps="false" >
+        <Backbone enable="true" residue_selector="FLEXIBLE_OR_TEMPLATE" />
+        <Chi      enable="true" residue_selector="COLDSPOT_OR_FLEXIBLE_OR_TEMPLATE" />
+    </MoveMapFactory>
+    # Binder Variant FunFolDes MoveMap
+    <MoveMapFactory name="FFDBINDERPACK_MOVEMAP"
+            bb="false" chi="false" nu="false" branches="false" jumps="false" >
+        <Backbone enable="true" residue_selector="CONTEXT_OR_FLEXIBLE_OR_TEMPLATE" />
+        <Chi      enable="true" residue_selector="COLDSPOT_OR_FLEXIBLE_OR_TEMPLATE" />
+    </MoveMapFactory>
+  </MOVE_MAP_FACTORIES>
+
+  <TASKOPERATIONS>
+    # Standard FunFolDes TaskOperators
+    <OperateOnResidueSubset name="FFDMOTIF_TASKOP"
+                            selector="HOTSPOT_OR_CONTEXT_AND_!FLEXIBLE" >
+        <PreventRepackingRLT/>
+    </OperateOnResidueSubset>
+    <OperateOnResidueSubset name="FFDFLEX_TASKOP"
+                            selector="FLEXIBLE_AND_!COLDSPOT" >
+        <RestrictToRepackingRLT/>
+    </OperateOnResidueSubset>
+    <OperateOnResidueSubset name="FFDTEMPLATE_TASKOP"
+                            selector="COLDSPOT_OR_TEMPLATE" >
+        <DisallowIfNonnativeRLT disallow_aas="C" />
+    </OperateOnResidueSubset>
+    <NoRepackDisulfides name="FFDTEMPLATE_DISULFIDES" />
+  </TASKOPERATIONS>
+
+  <FILTERS> # (confidence=0 -> to score not to filter)
+    # Globals
+    <RmsdFromResidueSelectorFilter name="driftRMSD" reference_name="folded_pose"
+       reference_selector="design" query_selector="design" confidence="0" />
+    <RmsdFromResidueSelectorFilter name="finalRMSD" reference_name="template_pose"
+      reference_selector="template" query_selector="design" confidence="0" />
+    <BuriedUnsatHbonds name="BUNS" jump_number="0" confidence="0"
+      task_operations="FFDMOTIF_TASKOP,FFDFLEX_TASKOP,FFDTEMPLATE_TASKOP" />
+    <PackStat name="packstat" repeats="5" chain="1" confidence="0" />
+    <ScorePoseSegmentFromResidueSelectorFilter name="design_score" confidence="0"
+      residue_selector="design" scorefxn="fullatom" />
+  </FILTERS>
+
+  <MOVERS>
+    ## CLEAN STRUCTURE:
+    <DeleteRegionMover name="delete" residue_selector="!template" />
+
+    ## PREPROCESSING: STORING INPUT STRUCTURES
+    <SavePoseMover name="saveFlded" reference_name="folded_pose" restore_pose="0" />
+    <SavePoseMover name="saveTmpl"  reference_name="template_pose" restore_pose="0" />
+    # ** SavePoseMover used like this does not need to be called during PROTOCOL to work.
+    <SavePoseMover name="readMotif" reference_name="motif_pose" pdb_file="%%donor%%" />
+
+    ## PREPROCESSING: MAKING FRAGMENTS
+    <StructFragmentMover name="inFrags" prefix="frags"
+      small_frag_file="%%frags3%%" large_frag_file="%%frags9%%"
+    />
+
+    ## PREPROCESSING: CONSTRAINTS
+    <AddConstraints name="foldingCST" >
+      <AtomPairConstraintGenerator name="atompairCST1" sd="3.0" ca_only="true"
+        use_harmonic="true" unweighted="true" min_seq_sep="6" max_distance="40"
+        residue_selector="template"
+      />
+    </AddConstraints>
+
+    # MAIN: NUBINITIO FOLDING
+    <NubInitioMover name="FFD" fragments_id="frags"
+        template_motif_selector="acceptor" rmsd_threshold="5" 
+        fullatom_scorefxn="fullatom" >
+      <Nub reference_name="motif_pose" residue_selector="donor" binder_selector="target" >
+        <Segment order="1" n_term_flex="3" c_term_flex="3" editable="3,6,10,16,20" />
+      </Nub>
+    </NubInitioMover>
+
+    # POSTPROCESSING: CONSTRAINTS
+    <AddConstraints name="designCST" >
+      <AtomPairConstraintGenerator name="atompairCST2" sd="1" ca_only="true"
+        use_harmonic="true" unweighted="true" min_seq_sep="6" max_distance="40" residue_selector="design"
+      />
+    </AddConstraints>
+    <ClearConstraintsMover name="clearCST" />
+
+    # POSTPROCESSING: SEQUENCE CONSTRAINTS
+    <AddHelixSequenceConstraints name="compositionCST" />
+
+    # POSTPROCESSING: DESING
+    <FastDesign name="DesignRelax" scorefxn="fullatom" clear_designable_residues="true"
+      task_operations="FFDMOTIF_TASKOP,FFDFLEX_TASKOP,FFDTEMPLATE_TASKOP"
+      repeats="3" delete_virtual_residues_after_FastRelax="true"
+      movemap_factory="FFDSTANDARD_MOVEMAP" >
+    </FastDesign>
+
+    # POSTPROCESSING: LOOP CLOSURE
+    <NubInitioLoopClosureMover name="loopC" fragments_id="frags"
+      break_side_ramp="true" design="true" fullatom_scorefxn="fullatom" />
+
+    ## VERBOSE
+    <DisplayPoseLabelsMover name="showDesign" movemap_factory="FFDSTANDARD_MOVEMAP"
+      task_operations="FFDMOTIF_TASKOP,FFDFLEX_TASKOP,FFDTEMPLATE_TASKOP" />
+
+  </MOVERS>
+
+  <PROTOCOLS>
+    ## PRE-PROCESSING
+    # Clean parst of the template that are of no interest
+    <Add mover="delete"     />
+    # Store the template for future reference
+    <Add mover="saveTmpl"   />
+    # Load the fragment files to run ab initio
+    <Add mover="inFrags"  />
+    # Obtain constraints from the template
+    <Add mover="foldingCST" />
+    
+    ## MAIN
+    # Folding
+    <Add mover="FFD"        />
+    # Report
+    <Add mover="showDesign" />
+    # Clean template constraints
+    <Add mover="clearCST"   />
+    # Save folded pose for future reference
+    <Add mover="saveFlded"  />
+
+    ## POST-PROCESSING
+    # Obtain constraints from the folded pose
+    <Add mover="designCST"      />
+    # Add helix-prone amino acid residue type constraints
+    <Add mover="compositionCST" />
+    # Design and relax process
+    <Add mover="DesignRelax"    />
+    # Close chainbreaks
+    <Add mover="loopC"          />
+    # Clean constraints
+    <Add mover="clearCST"       />
+
+    ## EVALUATION
+    # Structural changes between folded pose and final design
+    <Add filter="driftRMSD"    />
+    # Structural changes between initial template and final design
+    <Add filter="BUNS"         />
+    <Add filter="packstat"     />
+    # Score of the design alone
+    <Add filter="design_score" />
+  </PROTOCOLS>
+
+  <OUTPUT scorefxn="fullatom"/>
+
+</ROSETTASCRIPTS>

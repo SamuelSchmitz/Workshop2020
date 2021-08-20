@@ -1,0 +1,513 @@
+core.init: Checking for fconfig files in pwd and ./rosetta/flags 
+core.init: Rosetta version: rosetta.source.release-188 r188 2018.33+release.7111c54 7111c54c14ba9a53c012a524f8f1438a8e3fb020 https://www.rosettacommons.org 2018-08-14T01:44:18.723947
+core.init: command: /usr/people/sbioguest/rosetta_workshop/rosetta/main/source/bin/rosetta_scripts.default.linuxgccrelease @ docking.options -parser:protocol docking_minimize.xml -out:suffix _minimize -nstruct 10
+core.init: 'RNG device' seed mode, using '/dev/urandom', seed=-1203588136 seed_offset=0 real_seed=-1203588136
+core.init.random: RandomGenerator:init: Normal mode, seed=-1203588136 RG_type=mt19937
+core.init: Resolved executable path: /usr/people/sbioguest/rosetta_workshop/rosetta/main/source/build/src/release/linux/3.10/64/x86/gcc/4.8/default/rosetta_scripts.default.linuxgccrelease
+core.init: Looking for database based on location of executable: /usr/people/sbioguest/rosetta_workshop/rosetta/main/database/
+protocols.jd2.PDBJobInputter: Instantiate PDBJobInputter
+protocols.jd2.PDBJobInputter: PDBJobInputter::fill_jobs
+protocols.jd2.PDBJobInputter: pushed 3gbm_HA_3gbn_Ab.pdb nstruct indices 1 - 10
+protocols.evaluation.ChiWellRmsdEvaluatorCreator: Evaluation Creator active ... 
+protocols.jd2.PDBJobInputter: PDBJobInputter::pose_from_job
+protocols.jd2.PDBJobInputter: filling pose from PDB 3gbm_HA_3gbn_Ab.pdb
+core.chemical.GlobalResidueTypeSet: Finished initializing fa_standard residue type set.  Created 617 residue types
+core.chemical.GlobalResidueTypeSet: Total time to initialize 0.5 seconds.
+core.import_pose.import_pose: File '3gbm_HA_3gbn_Ab.pdb' automatically determined to be of type PDB
+core.conformation.Conformation: Found disulfide between residues 7 461
+core.conformation.Conformation: current variant for 7 CYS
+core.conformation.Conformation: current variant for 461 CYS
+core.conformation.Conformation: current variant for 7 CYD
+core.conformation.Conformation: current variant for 461 CYD
+core.conformation.Conformation: Found disulfide between residues 45 277
+core.conformation.Conformation: current variant for 45 CYS
+core.conformation.Conformation: current variant for 277 CYS
+core.conformation.Conformation: current variant for 45 CYD
+core.conformation.Conformation: current variant for 277 CYD
+core.conformation.Conformation: Found disulfide between residues 58 70
+core.conformation.Conformation: current variant for 58 CYS
+core.conformation.Conformation: current variant for 70 CYS
+core.conformation.Conformation: current variant for 58 CYD
+core.conformation.Conformation: current variant for 70 CYD
+core.conformation.Conformation: Found disulfide between residues 93 138
+core.conformation.Conformation: current variant for 93 CYS
+core.conformation.Conformation: current variant for 138 CYS
+core.conformation.Conformation: current variant for 93 CYD
+core.conformation.Conformation: current variant for 138 CYD
+core.conformation.Conformation: Found disulfide between residues 281 305
+core.conformation.Conformation: current variant for 281 CYS
+core.conformation.Conformation: current variant for 305 CYS
+core.conformation.Conformation: current variant for 281 CYD
+core.conformation.Conformation: current variant for 305 CYD
+core.conformation.Conformation: Found disulfide between residues 468 472
+core.conformation.Conformation: current variant for 468 CYS
+core.conformation.Conformation: current variant for 472 CYS
+core.conformation.Conformation: current variant for 468 CYD
+core.conformation.Conformation: current variant for 472 CYD
+core.conformation.Conformation: Found disulfide between residues 523 597
+core.conformation.Conformation: current variant for 523 CYS
+core.conformation.Conformation: current variant for 597 CYS
+core.conformation.Conformation: current variant for 523 CYD
+core.conformation.Conformation: current variant for 597 CYD
+core.conformation.Conformation: Found disulfide between residues 641 708
+core.conformation.Conformation: current variant for 641 CYS
+core.conformation.Conformation: current variant for 708 CYS
+core.conformation.Conformation: current variant for 641 CYD
+core.conformation.Conformation: current variant for 708 CYD
+protocols.rosetta_scripts.RosettaScriptsParser: dock_design_filename=docking_minimize.xml
+protocols.rosetta_scripts.RosettaScriptsParser: Generating XML Schema for rosetta_scripts...
+protocols.rosetta_scripts.RosettaScriptsParser: ...done
+protocols.rosetta_scripts.RosettaScriptsParser: Initializing schema validator...
+protocols.rosetta_scripts.RosettaScriptsParser: ...done
+protocols.rosetta_scripts.RosettaScriptsParser: Validating input script...
+protocols.rosetta_scripts.RosettaScriptsParser: ...done
+protocols.rosetta_scripts.RosettaScriptsParser: Parsed script:
+<ROSETTASCRIPTS>
+	<SCOREFXNS/>
+	<TASKOPERATIONS>
+		<InitializeFromCommandline name="ifcl"/>
+		<RestrictToRepacking name="rtr"/>
+		<RestrictToInterfaceVector CB_dist_cutoff="10.0" chain1_num="1,2" chain2_num="3,4" name="rtiv" nearby_atom_cutoff="5.5" vector_angle_cutoff="75" vector_dist_cutoff="9.0"/>
+		<PreventResiduesFromRepacking name="prfrp" residues="11,41,345"/>
+	</TASKOPERATIONS>
+	<FILTERS/>
+	<MOVERS>
+		<FastRelax name="minimize_interface" repeats="1" scorefxn="REF2015" task_operations="ifcl,rtr,rtiv,prfrp"/>
+		<Docking conserve_foldtree="0" design="0" fullatom="0" ignore_default_docking_task="0" jumps="1" local_refine="0" name="dock_low" optimize_fold_tree="1" score_high="REF2015" score_low="score_docking_low" task_operations="ifcl,prfrp"/>
+		<Docking conserve_foldtree="0" design="0" fullatom="1" jumps="1" local_refine="1" name="dock_high" optimize_fold_tree="1" score_high="REF2015" score_low="score_docking_low" task_operations="ifcl,prfrp"/>
+		<SaveAndRetrieveSidechains allsc="0" name="srsc"/>
+	</MOVERS>
+	<APPLY_TO_POSE/>
+	<PROTOCOLS>
+		<Add mover="minimize_interface"/>
+	</PROTOCOLS>
+	<OUTPUT scorefxn="REF2015"/>
+</ROSETTASCRIPTS>
+core.scoring.ScoreFunctionFactory: SCOREFUNCTION: ref2015.wts
+core.scoring.etable: Starting energy table calculation
+core.scoring.etable: smooth_etable: changing atr/rep split to bottom of energy well
+core.scoring.etable: smooth_etable: spline smoothing lj etables (maxdis = 6)
+core.scoring.etable: smooth_etable: spline smoothing solvation etables (max_dis = 6)
+core.scoring.etable: Finished calculating energy tables.
+basic.io.database: Database file opened: scoring/score_functions/hbonds/ref2015_params/HBPoly1D.csv
+basic.io.database: Database file opened: scoring/score_functions/hbonds/ref2015_params/HBFadeIntervals.csv
+basic.io.database: Database file opened: scoring/score_functions/hbonds/ref2015_params/HBEval.csv
+basic.io.database: Database file opened: scoring/score_functions/hbonds/ref2015_params/DonStrength.csv
+basic.io.database: Database file opened: scoring/score_functions/hbonds/ref2015_params/AccStrength.csv
+basic.io.database: Database file opened: scoring/score_functions/rama/fd/all.ramaProb
+basic.io.database: Database file opened: scoring/score_functions/rama/fd/prepro.ramaProb
+basic.io.database: Database file opened: scoring/score_functions/omega/omega_ppdep.all.txt
+basic.io.database: Database file opened: scoring/score_functions/omega/omega_ppdep.gly.txt
+basic.io.database: Database file opened: scoring/score_functions/omega/omega_ppdep.pro.txt
+basic.io.database: Database file opened: scoring/score_functions/omega/omega_ppdep.valile.txt
+basic.io.database: Database file opened: scoring/score_functions/P_AA_pp/P_AA
+basic.io.database: Database file opened: scoring/score_functions/P_AA_pp/P_AA_n
+core.scoring.P_AA: shapovalov_lib::shap_p_aa_pp_smooth_level of 1( aka low_smooth ) got activated.
+basic.io.database: Database file opened: scoring/score_functions/P_AA_pp/shapovalov/10deg/kappa131/a20.prop
+core.scoring.etable: Starting energy table calculation
+core.scoring.etable: smooth_etable: changing atr/rep split to bottom of energy well
+core.scoring.etable: smooth_etable: spline smoothing lj etables (maxdis = 6)
+core.scoring.etable: smooth_etable: spline smoothing solvation etables (max_dis = 6)
+core.scoring.etable: Finished calculating energy tables.
+basic.io.database: Database file opened: scoring/score_functions/PairEPotential/pdb_pair_stats_fine
+basic.io.database: Database file opened: scoring/score_functions/InterchainPotential/interchain_env_log.txt
+basic.io.database: Database file opened: scoring/score_functions/InterchainPotential/interchain_pair_log.txt
+basic.io.database: Database file opened: scoring/score_functions/EnvPairPotential/env_log.txt
+basic.io.database: Database file opened: scoring/score_functions/EnvPairPotential/cbeta_den.txt
+basic.io.database: Database file opened: scoring/score_functions/EnvPairPotential/pair_log.txt
+basic.io.database: Database file opened: scoring/score_functions/EnvPairPotential/cenpack_log.txt
+core.scoring.ramachandran: shapovalov_lib::shap_rama_smooth_level of 4( aka highest_smooth ) got activated.
+basic.io.database: Database file opened: scoring/score_functions/rama/shapovalov/kappa25/all.ramaProb
+protocols.jd2.parser.TaskOperationLoader: Defined TaskOperation named "ifcl" of type InitializeFromCommandline
+protocols.jd2.parser.TaskOperationLoader: Defined TaskOperation named "rtr" of type RestrictToRepacking
+protocols.jd2.parser.TaskOperationLoader: Defined TaskOperation named "rtiv" of type RestrictToInterfaceVector
+protocols.jd2.parser.TaskOperationLoader: Defined TaskOperation named "prfrp" of type PreventResiduesFromRepacking
+protocols.relax.FastRelax: ================== Reading script file: /usr/people/sbioguest/rosetta_workshop/rosetta/main/database/sampling/relax_scripts/default.txt ==================
+protocols.relax.FastRelax: repeat 5
+protocols.relax.FastRelax: ramp_repack_min 0.02  0.01     1.0
+protocols.relax.FastRelax: ramp_repack_min 0.250 0.01     0.5
+protocols.relax.FastRelax: ramp_repack_min 0.550 0.01     0.0
+protocols.relax.FastRelax: ramp_repack_min 1     0.00001  0.0
+protocols.relax.FastRelax: accept_to_best
+protocols.relax.FastRelax: endrepeat
+core.pack.task.xml_util: Object minimize_interface reading the following task_operations: Adding the following task operations
+ifcl rtr rtiv prfrp 
+protocols.relax.FastRelax: ================== Reading script file: /usr/people/sbioguest/rosetta_workshop/rosetta/main/database/sampling/relax_scripts/default.txt ==================
+protocols.relax.FastRelax: repeat 1
+protocols.relax.FastRelax: ramp_repack_min 0.02  0.01     1.0
+protocols.relax.FastRelax: ramp_repack_min 0.250 0.01     0.5
+protocols.relax.FastRelax: ramp_repack_min 0.550 0.01     0.0
+protocols.relax.FastRelax: ramp_repack_min 1     0.00001  0.0
+protocols.relax.FastRelax: accept_to_best
+protocols.relax.FastRelax: endrepeat
+protocols.rosetta_scripts.RosettaScriptsParser: Defined mover named "minimize_interface" of type FastRelax
+core.scoring.ScoreFunctionFactory: SCOREFUNCTION: ref2015.wts
+protocols.docking.DockingInitialPerturbation: Reading options...
+core.pack.task.xml_util: Object dock_low reading the following task_operations: Adding the following task operations
+ifcl prfrp 
+protocols.protein_interface_design.movers.DockAndRetrieveSidechains: docking mover with parameters low_res_protocol_only_ 1 local_refine 0 view 0  lowres_scorefxn= score_docking_low  highres_scorefxn= REF2015 over rb_jumps 1, optimize fold tree=1
+protocols.rosetta_scripts.RosettaScriptsParser: Defined mover named "dock_low" of type Docking
+core.scoring.ScoreFunctionFactory: SCOREFUNCTION: ref2015.wts
+core.scoring.ScoreFunctionFactory: SCOREFUNCTION: ref2015.wts
+core.scoring.ScoreFunctionFactory: SCOREFUNCTION: ref2015.wts
+core.scoring.ScoreFunctionFactory: SCOREFUNCTION: ref2015.wts
+core.scoring.ScoreFunctionFactory: SCOREFUNCTION: ref2015.wts
+core.pack.task.xml_util: Object dock_high reading the following task_operations: Adding the following task operations
+ifcl prfrp 
+protocols.protein_interface_design.movers.DockAndRetrieveSidechains: docking mover with parameters low_res_protocol_only_ 0 local_refine 1 view 0  lowres_scorefxn= score_docking_low  highres_scorefxn= REF2015 over rb_jumps 1, optimize fold tree=1
+protocols.rosetta_scripts.RosettaScriptsParser: Defined mover named "dock_high" of type Docking
+protocols.rosetta_scripts.RosettaScriptsParser: Defined mover named "srsc" of type SaveAndRetrieveSidechains
+protocols.rosetta_scripts.ParsedProtocol: ParsedProtocol mover with the following movers and filters
+protocols.rosetta_scripts.ParsedProtocol: added mover "minimize_interface" with filter "true_filter"
+protocols.jd2.PDBJobInputter: PDBJobInputter::pose_from_job
+protocols.jd2.PDBJobInputter: filling pose from saved copy 3gbm_HA_3gbn_Ab.pdb
+protocols.rosetta_scripts.ParsedProtocol: =======================BEGIN MOVER FastRelax - minimize_interface=======================
+basic.io.database: Database file opened: scoring/score_functions/elec_cp_reps.dat
+core.scoring.elec.util: Read 40 countpair representative atoms
+core.pack.dunbrack.RotamerLibrary: shapovalov_lib_fixes_enable option is true.
+core.pack.dunbrack.RotamerLibrary: shapovalov_lib::shap_dun10_smooth_level of 1( aka lowest_smooth ) got activated.
+core.pack.dunbrack.RotamerLibrary: Binary rotamer library selected: /usr/people/sbioguest/rosetta_workshop/rosetta/main/database/rotamer/shapovalov/StpDwn_0-0-0/Dunbrack10.lib.bin
+core.pack.dunbrack.RotamerLibrary: Using Dunbrack library binary file '/usr/people/sbioguest/rosetta_workshop/rosetta/main/database/rotamer/shapovalov/StpDwn_0-0-0/Dunbrack10.lib.bin'.
+core.pack.dunbrack.RotamerLibrary: Dunbrack 2010 library took 0.13 seconds to load from binary
+protocols.relax.FastRelax: CMD: repeat  -1072.76  0  0  0.55
+core.pack.task: Packer task: initialize from command line() 
+core.pack.pack_rotamers: built 3293 rotamers at 42 positions.
+core.pack.interaction_graph.interaction_graph_factory: Instantiating DensePDInteractionGraph
+core.pack.interaction_graph.interaction_graph_factory: IG: 8851052 bytes
+core.optimization.Minimizer: [ WARNING ] LBFGS MAX CYCLES 2000 EXCEEDED, BUT FUNC NOT CONVERGED!
+protocols.relax.FastRelax: CMD: ramp_repack_min  -3446.22  3.85684  3.85684  0.011
+core.pack.task: Packer task: initialize from command line() 
+core.pack.pack_rotamers: built 2473 rotamers at 46 positions.
+core.pack.interaction_graph.interaction_graph_factory: Instantiating DensePDInteractionGraph
+core.pack.interaction_graph.interaction_graph_factory: IG: 4383744 bytes
+core.optimization.Minimizer: [ WARNING ] LBFGS MAX CYCLES 2000 EXCEEDED, BUT FUNC NOT CONVERGED!
+protocols.relax.FastRelax: CMD: ramp_repack_min  -2665.77  2.48775  2.48775  0.1375
+core.pack.task: Packer task: initialize from command line() 
+core.pack.pack_rotamers: built 2383 rotamers at 41 positions.
+core.pack.interaction_graph.interaction_graph_factory: Instantiating DensePDInteractionGraph
+core.pack.interaction_graph.interaction_graph_factory: IG: 4311508 bytes
+protocols.relax.FastRelax: CMD: ramp_repack_min  -2377.69  2.35587  2.35587  0.3025
+core.pack.task: Packer task: initialize from command line() 
+core.pack.pack_rotamers: built 2364 rotamers at 41 positions.
+core.pack.interaction_graph.interaction_graph_factory: Instantiating DensePDInteractionGraph
+core.pack.interaction_graph.interaction_graph_factory: IG: 4141340 bytes
+protocols.relax.FastRelax: CMD: ramp_repack_min  -2145.8  2.24199  2.24199  0.55
+protocols.relax.FastRelax: MRP: 0  -2145.8  -2145.8  2.24199  2.24199  
+protocols.relax.FastRelax: CMD: accept_to_best  -2145.8  2.24199  2.24199  0.55
+protocols.relax.FastRelax: CMD: endrepeat  -2145.8  2.24199  2.24199  0.55
+protocols::checkpoint: Deleting checkpoints of FastRelax
+protocols.rosetta_scripts.ParsedProtocol: setting status to success
+protocols.jd2.JobDistributor: 3gbm_HA_3gbn_Ab_minimize_0001 reported success in 1318 seconds
+protocols.jd2.PDBJobInputter: PDBJobInputter::pose_from_job
+protocols.jd2.PDBJobInputter: filling pose from saved copy 3gbm_HA_3gbn_Ab.pdb
+protocols.jd2.PDBJobInputter: PDBJobInputter::pose_from_job
+protocols.jd2.PDBJobInputter: filling pose from saved copy 3gbm_HA_3gbn_Ab.pdb
+protocols.rosetta_scripts.ParsedProtocol: =======================BEGIN MOVER FastRelax - minimize_interface=======================
+protocols.relax.FastRelax: CMD: repeat  -1072.76  0  0  0.55
+core.pack.task: Packer task: initialize from command line() 
+core.pack.pack_rotamers: built 3293 rotamers at 42 positions.
+core.pack.interaction_graph.interaction_graph_factory: Instantiating DensePDInteractionGraph
+core.pack.interaction_graph.interaction_graph_factory: IG: 8851052 bytes
+core.optimization.Minimizer: [ WARNING ] LBFGS MAX CYCLES 2000 EXCEEDED, BUT FUNC NOT CONVERGED!
+protocols.relax.FastRelax: CMD: ramp_repack_min  -3446.22  3.85684  3.85684  0.011
+core.pack.task: Packer task: initialize from command line() 
+core.pack.pack_rotamers: built 2473 rotamers at 46 positions.
+core.pack.interaction_graph.interaction_graph_factory: Instantiating DensePDInteractionGraph
+core.pack.interaction_graph.interaction_graph_factory: IG: 4383744 bytes
+core.optimization.Minimizer: [ WARNING ] LBFGS MAX CYCLES 2000 EXCEEDED, BUT FUNC NOT CONVERGED!
+protocols.relax.FastRelax: CMD: ramp_repack_min  -2665.77  2.48775  2.48775  0.1375
+core.pack.task: Packer task: initialize from command line() 
+core.pack.pack_rotamers: built 2383 rotamers at 41 positions.
+core.pack.interaction_graph.interaction_graph_factory: Instantiating DensePDInteractionGraph
+core.pack.interaction_graph.interaction_graph_factory: IG: 4311508 bytes
+protocols.relax.FastRelax: CMD: ramp_repack_min  -2377.69  2.35587  2.35587  0.3025
+core.pack.task: Packer task: initialize from command line() 
+core.pack.pack_rotamers: built 2364 rotamers at 41 positions.
+core.pack.interaction_graph.interaction_graph_factory: Instantiating DensePDInteractionGraph
+core.pack.interaction_graph.interaction_graph_factory: IG: 4141340 bytes
+protocols.relax.FastRelax: CMD: ramp_repack_min  -2145.8  2.24199  2.24199  0.55
+protocols.relax.FastRelax: MRP: 0  -2145.8  -2145.8  2.24199  2.24199  
+protocols.relax.FastRelax: CMD: accept_to_best  -2145.8  2.24199  2.24199  0.55
+protocols.relax.FastRelax: CMD: endrepeat  -2145.8  2.24199  2.24199  0.55
+protocols::checkpoint: Deleting checkpoints of FastRelax
+protocols.rosetta_scripts.ParsedProtocol: setting status to success
+protocols.jd2.JobDistributor: 3gbm_HA_3gbn_Ab_minimize_0002 reported success in 1321 seconds
+protocols.jd2.PDBJobInputter: PDBJobInputter::pose_from_job
+protocols.jd2.PDBJobInputter: filling pose from saved copy 3gbm_HA_3gbn_Ab.pdb
+protocols.jd2.PDBJobInputter: PDBJobInputter::pose_from_job
+protocols.jd2.PDBJobInputter: filling pose from saved copy 3gbm_HA_3gbn_Ab.pdb
+protocols.rosetta_scripts.ParsedProtocol: =======================BEGIN MOVER FastRelax - minimize_interface=======================
+protocols.relax.FastRelax: CMD: repeat  -1072.76  0  0  0.55
+core.pack.task: Packer task: initialize from command line() 
+core.pack.pack_rotamers: built 3293 rotamers at 42 positions.
+core.pack.interaction_graph.interaction_graph_factory: Instantiating DensePDInteractionGraph
+core.pack.interaction_graph.interaction_graph_factory: IG: 8851052 bytes
+core.optimization.Minimizer: [ WARNING ] LBFGS MAX CYCLES 2000 EXCEEDED, BUT FUNC NOT CONVERGED!
+protocols.relax.FastRelax: CMD: ramp_repack_min  -3446.22  3.85684  3.85684  0.011
+core.pack.task: Packer task: initialize from command line() 
+core.pack.pack_rotamers: built 2473 rotamers at 46 positions.
+core.pack.interaction_graph.interaction_graph_factory: Instantiating DensePDInteractionGraph
+core.pack.interaction_graph.interaction_graph_factory: IG: 4383744 bytes
+core.optimization.Minimizer: [ WARNING ] LBFGS MAX CYCLES 2000 EXCEEDED, BUT FUNC NOT CONVERGED!
+protocols.relax.FastRelax: CMD: ramp_repack_min  -2665.77  2.48775  2.48775  0.1375
+core.pack.task: Packer task: initialize from command line() 
+core.pack.pack_rotamers: built 2383 rotamers at 41 positions.
+core.pack.interaction_graph.interaction_graph_factory: Instantiating DensePDInteractionGraph
+core.pack.interaction_graph.interaction_graph_factory: IG: 4311508 bytes
+protocols.relax.FastRelax: CMD: ramp_repack_min  -2377.69  2.35587  2.35587  0.3025
+core.pack.task: Packer task: initialize from command line() 
+core.pack.pack_rotamers: built 2364 rotamers at 41 positions.
+core.pack.interaction_graph.interaction_graph_factory: Instantiating DensePDInteractionGraph
+core.pack.interaction_graph.interaction_graph_factory: IG: 4141340 bytes
+protocols.relax.FastRelax: CMD: ramp_repack_min  -2145.8  2.24199  2.24199  0.55
+protocols.relax.FastRelax: MRP: 0  -2145.8  -2145.8  2.24199  2.24199  
+protocols.relax.FastRelax: CMD: accept_to_best  -2145.8  2.24199  2.24199  0.55
+protocols.relax.FastRelax: CMD: endrepeat  -2145.8  2.24199  2.24199  0.55
+protocols::checkpoint: Deleting checkpoints of FastRelax
+protocols.rosetta_scripts.ParsedProtocol: setting status to success
+protocols.jd2.JobDistributor: 3gbm_HA_3gbn_Ab_minimize_0003 reported success in 1318 seconds
+protocols.jd2.PDBJobInputter: PDBJobInputter::pose_from_job
+protocols.jd2.PDBJobInputter: filling pose from saved copy 3gbm_HA_3gbn_Ab.pdb
+protocols.jd2.PDBJobInputter: PDBJobInputter::pose_from_job
+protocols.jd2.PDBJobInputter: filling pose from saved copy 3gbm_HA_3gbn_Ab.pdb
+protocols.rosetta_scripts.ParsedProtocol: =======================BEGIN MOVER FastRelax - minimize_interface=======================
+protocols.relax.FastRelax: CMD: repeat  -1072.76  0  0  0.55
+core.pack.task: Packer task: initialize from command line() 
+core.pack.pack_rotamers: built 3293 rotamers at 42 positions.
+core.pack.interaction_graph.interaction_graph_factory: Instantiating DensePDInteractionGraph
+core.pack.interaction_graph.interaction_graph_factory: IG: 8851052 bytes
+core.optimization.Minimizer: [ WARNING ] LBFGS MAX CYCLES 2000 EXCEEDED, BUT FUNC NOT CONVERGED!
+protocols.relax.FastRelax: CMD: ramp_repack_min  -3446.22  3.85684  3.85684  0.011
+core.pack.task: Packer task: initialize from command line() 
+core.pack.pack_rotamers: built 2473 rotamers at 46 positions.
+core.pack.interaction_graph.interaction_graph_factory: Instantiating DensePDInteractionGraph
+core.pack.interaction_graph.interaction_graph_factory: IG: 4383744 bytes
+core.optimization.Minimizer: [ WARNING ] LBFGS MAX CYCLES 2000 EXCEEDED, BUT FUNC NOT CONVERGED!
+protocols.relax.FastRelax: CMD: ramp_repack_min  -2665.77  2.48775  2.48775  0.1375
+core.pack.task: Packer task: initialize from command line() 
+core.pack.pack_rotamers: built 2383 rotamers at 41 positions.
+core.pack.interaction_graph.interaction_graph_factory: Instantiating DensePDInteractionGraph
+core.pack.interaction_graph.interaction_graph_factory: IG: 4311508 bytes
+protocols.relax.FastRelax: CMD: ramp_repack_min  -2377.69  2.35587  2.35587  0.3025
+core.pack.task: Packer task: initialize from command line() 
+core.pack.pack_rotamers: built 2364 rotamers at 41 positions.
+core.pack.interaction_graph.interaction_graph_factory: Instantiating DensePDInteractionGraph
+core.pack.interaction_graph.interaction_graph_factory: IG: 4141340 bytes
+protocols.relax.FastRelax: CMD: ramp_repack_min  -2145.8  2.24199  2.24199  0.55
+protocols.relax.FastRelax: MRP: 0  -2145.8  -2145.8  2.24199  2.24199  
+protocols.relax.FastRelax: CMD: accept_to_best  -2145.8  2.24199  2.24199  0.55
+protocols.relax.FastRelax: CMD: endrepeat  -2145.8  2.24199  2.24199  0.55
+protocols::checkpoint: Deleting checkpoints of FastRelax
+protocols.rosetta_scripts.ParsedProtocol: setting status to success
+protocols.jd2.JobDistributor: 3gbm_HA_3gbn_Ab_minimize_0004 reported success in 1321 seconds
+protocols.jd2.PDBJobInputter: PDBJobInputter::pose_from_job
+protocols.jd2.PDBJobInputter: filling pose from saved copy 3gbm_HA_3gbn_Ab.pdb
+protocols.jd2.PDBJobInputter: PDBJobInputter::pose_from_job
+protocols.jd2.PDBJobInputter: filling pose from saved copy 3gbm_HA_3gbn_Ab.pdb
+protocols.rosetta_scripts.ParsedProtocol: =======================BEGIN MOVER FastRelax - minimize_interface=======================
+protocols.relax.FastRelax: CMD: repeat  -1072.76  0  0  0.55
+core.pack.task: Packer task: initialize from command line() 
+core.pack.pack_rotamers: built 3293 rotamers at 42 positions.
+core.pack.interaction_graph.interaction_graph_factory: Instantiating DensePDInteractionGraph
+core.pack.interaction_graph.interaction_graph_factory: IG: 8851052 bytes
+core.optimization.Minimizer: [ WARNING ] LBFGS MAX CYCLES 2000 EXCEEDED, BUT FUNC NOT CONVERGED!
+protocols.relax.FastRelax: CMD: ramp_repack_min  -3446.22  3.85684  3.85684  0.011
+core.pack.task: Packer task: initialize from command line() 
+core.pack.pack_rotamers: built 2473 rotamers at 46 positions.
+core.pack.interaction_graph.interaction_graph_factory: Instantiating DensePDInteractionGraph
+core.pack.interaction_graph.interaction_graph_factory: IG: 4383744 bytes
+core.optimization.Minimizer: [ WARNING ] LBFGS MAX CYCLES 2000 EXCEEDED, BUT FUNC NOT CONVERGED!
+protocols.relax.FastRelax: CMD: ramp_repack_min  -2665.77  2.48775  2.48775  0.1375
+core.pack.task: Packer task: initialize from command line() 
+core.pack.pack_rotamers: built 2383 rotamers at 41 positions.
+core.pack.interaction_graph.interaction_graph_factory: Instantiating DensePDInteractionGraph
+core.pack.interaction_graph.interaction_graph_factory: IG: 4311508 bytes
+protocols.relax.FastRelax: CMD: ramp_repack_min  -2377.69  2.35587  2.35587  0.3025
+core.pack.task: Packer task: initialize from command line() 
+core.pack.pack_rotamers: built 2364 rotamers at 41 positions.
+core.pack.interaction_graph.interaction_graph_factory: Instantiating DensePDInteractionGraph
+core.pack.interaction_graph.interaction_graph_factory: IG: 4141340 bytes
+protocols.relax.FastRelax: CMD: ramp_repack_min  -2145.8  2.24199  2.24199  0.55
+protocols.relax.FastRelax: MRP: 0  -2145.8  -2145.8  2.24199  2.24199  
+protocols.relax.FastRelax: CMD: accept_to_best  -2145.8  2.24199  2.24199  0.55
+protocols.relax.FastRelax: CMD: endrepeat  -2145.8  2.24199  2.24199  0.55
+protocols::checkpoint: Deleting checkpoints of FastRelax
+protocols.rosetta_scripts.ParsedProtocol: setting status to success
+protocols.jd2.JobDistributor: 3gbm_HA_3gbn_Ab_minimize_0005 reported success in 1319 seconds
+protocols.jd2.PDBJobInputter: PDBJobInputter::pose_from_job
+protocols.jd2.PDBJobInputter: filling pose from saved copy 3gbm_HA_3gbn_Ab.pdb
+protocols.jd2.PDBJobInputter: PDBJobInputter::pose_from_job
+protocols.jd2.PDBJobInputter: filling pose from saved copy 3gbm_HA_3gbn_Ab.pdb
+protocols.rosetta_scripts.ParsedProtocol: =======================BEGIN MOVER FastRelax - minimize_interface=======================
+protocols.relax.FastRelax: CMD: repeat  -1072.76  0  0  0.55
+core.pack.task: Packer task: initialize from command line() 
+core.pack.pack_rotamers: built 3293 rotamers at 42 positions.
+core.pack.interaction_graph.interaction_graph_factory: Instantiating DensePDInteractionGraph
+core.pack.interaction_graph.interaction_graph_factory: IG: 8851052 bytes
+core.optimization.Minimizer: [ WARNING ] LBFGS MAX CYCLES 2000 EXCEEDED, BUT FUNC NOT CONVERGED!
+protocols.relax.FastRelax: CMD: ramp_repack_min  -3446.22  3.85684  3.85684  0.011
+core.pack.task: Packer task: initialize from command line() 
+core.pack.pack_rotamers: built 2473 rotamers at 46 positions.
+core.pack.interaction_graph.interaction_graph_factory: Instantiating DensePDInteractionGraph
+core.pack.interaction_graph.interaction_graph_factory: IG: 4383744 bytes
+core.optimization.Minimizer: [ WARNING ] LBFGS MAX CYCLES 2000 EXCEEDED, BUT FUNC NOT CONVERGED!
+protocols.relax.FastRelax: CMD: ramp_repack_min  -2665.77  2.48775  2.48775  0.1375
+core.pack.task: Packer task: initialize from command line() 
+core.pack.pack_rotamers: built 2383 rotamers at 41 positions.
+core.pack.interaction_graph.interaction_graph_factory: Instantiating DensePDInteractionGraph
+core.pack.interaction_graph.interaction_graph_factory: IG: 4311508 bytes
+protocols.relax.FastRelax: CMD: ramp_repack_min  -2377.69  2.35587  2.35587  0.3025
+core.pack.task: Packer task: initialize from command line() 
+core.pack.pack_rotamers: built 2364 rotamers at 41 positions.
+core.pack.interaction_graph.interaction_graph_factory: Instantiating DensePDInteractionGraph
+core.pack.interaction_graph.interaction_graph_factory: IG: 4141340 bytes
+protocols.relax.FastRelax: CMD: ramp_repack_min  -2145.8  2.24199  2.24199  0.55
+protocols.relax.FastRelax: MRP: 0  -2145.8  -2145.8  2.24199  2.24199  
+protocols.relax.FastRelax: CMD: accept_to_best  -2145.8  2.24199  2.24199  0.55
+protocols.relax.FastRelax: CMD: endrepeat  -2145.8  2.24199  2.24199  0.55
+protocols::checkpoint: Deleting checkpoints of FastRelax
+protocols.rosetta_scripts.ParsedProtocol: setting status to success
+protocols.jd2.JobDistributor: 3gbm_HA_3gbn_Ab_minimize_0006 reported success in 1320 seconds
+protocols.jd2.PDBJobInputter: PDBJobInputter::pose_from_job
+protocols.jd2.PDBJobInputter: filling pose from saved copy 3gbm_HA_3gbn_Ab.pdb
+protocols.jd2.PDBJobInputter: PDBJobInputter::pose_from_job
+protocols.jd2.PDBJobInputter: filling pose from saved copy 3gbm_HA_3gbn_Ab.pdb
+protocols.rosetta_scripts.ParsedProtocol: =======================BEGIN MOVER FastRelax - minimize_interface=======================
+protocols.relax.FastRelax: CMD: repeat  -1072.76  0  0  0.55
+core.pack.task: Packer task: initialize from command line() 
+core.pack.pack_rotamers: built 3293 rotamers at 42 positions.
+core.pack.interaction_graph.interaction_graph_factory: Instantiating DensePDInteractionGraph
+core.pack.interaction_graph.interaction_graph_factory: IG: 8851052 bytes
+core.optimization.Minimizer: [ WARNING ] LBFGS MAX CYCLES 2000 EXCEEDED, BUT FUNC NOT CONVERGED!
+protocols.relax.FastRelax: CMD: ramp_repack_min  -3446.22  3.85684  3.85684  0.011
+core.pack.task: Packer task: initialize from command line() 
+core.pack.pack_rotamers: built 2473 rotamers at 46 positions.
+core.pack.interaction_graph.interaction_graph_factory: Instantiating DensePDInteractionGraph
+core.pack.interaction_graph.interaction_graph_factory: IG: 4383744 bytes
+core.optimization.Minimizer: [ WARNING ] LBFGS MAX CYCLES 2000 EXCEEDED, BUT FUNC NOT CONVERGED!
+protocols.relax.FastRelax: CMD: ramp_repack_min  -2665.77  2.48775  2.48775  0.1375
+core.pack.task: Packer task: initialize from command line() 
+core.pack.pack_rotamers: built 2383 rotamers at 41 positions.
+core.pack.interaction_graph.interaction_graph_factory: Instantiating DensePDInteractionGraph
+core.pack.interaction_graph.interaction_graph_factory: IG: 4311508 bytes
+protocols.relax.FastRelax: CMD: ramp_repack_min  -2377.69  2.35587  2.35587  0.3025
+core.pack.task: Packer task: initialize from command line() 
+core.pack.pack_rotamers: built 2364 rotamers at 41 positions.
+core.pack.interaction_graph.interaction_graph_factory: Instantiating DensePDInteractionGraph
+core.pack.interaction_graph.interaction_graph_factory: IG: 4141340 bytes
+protocols.relax.FastRelax: CMD: ramp_repack_min  -2145.8  2.24199  2.24199  0.55
+protocols.relax.FastRelax: MRP: 0  -2145.8  -2145.8  2.24199  2.24199  
+protocols.relax.FastRelax: CMD: accept_to_best  -2145.8  2.24199  2.24199  0.55
+protocols.relax.FastRelax: CMD: endrepeat  -2145.8  2.24199  2.24199  0.55
+protocols::checkpoint: Deleting checkpoints of FastRelax
+protocols.rosetta_scripts.ParsedProtocol: setting status to success
+protocols.jd2.JobDistributor: 3gbm_HA_3gbn_Ab_minimize_0007 reported success in 1320 seconds
+protocols.jd2.PDBJobInputter: PDBJobInputter::pose_from_job
+protocols.jd2.PDBJobInputter: filling pose from saved copy 3gbm_HA_3gbn_Ab.pdb
+protocols.jd2.PDBJobInputter: PDBJobInputter::pose_from_job
+protocols.jd2.PDBJobInputter: filling pose from saved copy 3gbm_HA_3gbn_Ab.pdb
+protocols.rosetta_scripts.ParsedProtocol: =======================BEGIN MOVER FastRelax - minimize_interface=======================
+protocols.relax.FastRelax: CMD: repeat  -1072.76  0  0  0.55
+core.pack.task: Packer task: initialize from command line() 
+core.pack.pack_rotamers: built 3293 rotamers at 42 positions.
+core.pack.interaction_graph.interaction_graph_factory: Instantiating DensePDInteractionGraph
+core.pack.interaction_graph.interaction_graph_factory: IG: 8851052 bytes
+core.optimization.Minimizer: [ WARNING ] LBFGS MAX CYCLES 2000 EXCEEDED, BUT FUNC NOT CONVERGED!
+protocols.relax.FastRelax: CMD: ramp_repack_min  -3446.22  3.85684  3.85684  0.011
+core.pack.task: Packer task: initialize from command line() 
+core.pack.pack_rotamers: built 2473 rotamers at 46 positions.
+core.pack.interaction_graph.interaction_graph_factory: Instantiating DensePDInteractionGraph
+core.pack.interaction_graph.interaction_graph_factory: IG: 4383744 bytes
+core.optimization.Minimizer: [ WARNING ] LBFGS MAX CYCLES 2000 EXCEEDED, BUT FUNC NOT CONVERGED!
+protocols.relax.FastRelax: CMD: ramp_repack_min  -2665.77  2.48775  2.48775  0.1375
+core.pack.task: Packer task: initialize from command line() 
+core.pack.pack_rotamers: built 2383 rotamers at 41 positions.
+core.pack.interaction_graph.interaction_graph_factory: Instantiating DensePDInteractionGraph
+core.pack.interaction_graph.interaction_graph_factory: IG: 4311508 bytes
+protocols.relax.FastRelax: CMD: ramp_repack_min  -2377.69  2.35587  2.35587  0.3025
+core.pack.task: Packer task: initialize from command line() 
+core.pack.pack_rotamers: built 2364 rotamers at 41 positions.
+core.pack.interaction_graph.interaction_graph_factory: Instantiating DensePDInteractionGraph
+core.pack.interaction_graph.interaction_graph_factory: IG: 4141340 bytes
+protocols.relax.FastRelax: CMD: ramp_repack_min  -2145.8  2.24199  2.24199  0.55
+protocols.relax.FastRelax: MRP: 0  -2145.8  -2145.8  2.24199  2.24199  
+protocols.relax.FastRelax: CMD: accept_to_best  -2145.8  2.24199  2.24199  0.55
+protocols.relax.FastRelax: CMD: endrepeat  -2145.8  2.24199  2.24199  0.55
+protocols::checkpoint: Deleting checkpoints of FastRelax
+protocols.rosetta_scripts.ParsedProtocol: setting status to success
+protocols.jd2.JobDistributor: 3gbm_HA_3gbn_Ab_minimize_0008 reported success in 1320 seconds
+protocols.jd2.PDBJobInputter: PDBJobInputter::pose_from_job
+protocols.jd2.PDBJobInputter: filling pose from saved copy 3gbm_HA_3gbn_Ab.pdb
+protocols.jd2.PDBJobInputter: PDBJobInputter::pose_from_job
+protocols.jd2.PDBJobInputter: filling pose from saved copy 3gbm_HA_3gbn_Ab.pdb
+protocols.rosetta_scripts.ParsedProtocol: =======================BEGIN MOVER FastRelax - minimize_interface=======================
+protocols.relax.FastRelax: CMD: repeat  -1072.76  0  0  0.55
+core.pack.task: Packer task: initialize from command line() 
+core.pack.pack_rotamers: built 3293 rotamers at 42 positions.
+core.pack.interaction_graph.interaction_graph_factory: Instantiating DensePDInteractionGraph
+core.pack.interaction_graph.interaction_graph_factory: IG: 8851052 bytes
+core.optimization.Minimizer: [ WARNING ] LBFGS MAX CYCLES 2000 EXCEEDED, BUT FUNC NOT CONVERGED!
+protocols.relax.FastRelax: CMD: ramp_repack_min  -3446.22  3.85684  3.85684  0.011
+core.pack.task: Packer task: initialize from command line() 
+core.pack.pack_rotamers: built 2473 rotamers at 46 positions.
+core.pack.interaction_graph.interaction_graph_factory: Instantiating DensePDInteractionGraph
+core.pack.interaction_graph.interaction_graph_factory: IG: 4383744 bytes
+core.optimization.Minimizer: [ WARNING ] LBFGS MAX CYCLES 2000 EXCEEDED, BUT FUNC NOT CONVERGED!
+protocols.relax.FastRelax: CMD: ramp_repack_min  -2665.77  2.48775  2.48775  0.1375
+core.pack.task: Packer task: initialize from command line() 
+core.pack.pack_rotamers: built 2383 rotamers at 41 positions.
+core.pack.interaction_graph.interaction_graph_factory: Instantiating DensePDInteractionGraph
+core.pack.interaction_graph.interaction_graph_factory: IG: 4311508 bytes
+protocols.relax.FastRelax: CMD: ramp_repack_min  -2377.69  2.35587  2.35587  0.3025
+core.pack.task: Packer task: initialize from command line() 
+core.pack.pack_rotamers: built 2364 rotamers at 41 positions.
+core.pack.interaction_graph.interaction_graph_factory: Instantiating DensePDInteractionGraph
+core.pack.interaction_graph.interaction_graph_factory: IG: 4141340 bytes
+protocols.relax.FastRelax: CMD: ramp_repack_min  -2145.8  2.24199  2.24199  0.55
+protocols.relax.FastRelax: MRP: 0  -2145.8  -2145.8  2.24199  2.24199  
+protocols.relax.FastRelax: CMD: accept_to_best  -2145.8  2.24199  2.24199  0.55
+protocols.relax.FastRelax: CMD: endrepeat  -2145.8  2.24199  2.24199  0.55
+protocols::checkpoint: Deleting checkpoints of FastRelax
+protocols.rosetta_scripts.ParsedProtocol: setting status to success
+protocols.jd2.JobDistributor: 3gbm_HA_3gbn_Ab_minimize_0009 reported success in 1319 seconds
+protocols.jd2.PDBJobInputter: PDBJobInputter::pose_from_job
+protocols.jd2.PDBJobInputter: filling pose from saved copy 3gbm_HA_3gbn_Ab.pdb
+protocols.jd2.PDBJobInputter: PDBJobInputter::pose_from_job
+protocols.jd2.PDBJobInputter: filling pose from saved copy 3gbm_HA_3gbn_Ab.pdb
+protocols.rosetta_scripts.ParsedProtocol: =======================BEGIN MOVER FastRelax - minimize_interface=======================
+protocols.relax.FastRelax: CMD: repeat  -1072.76  0  0  0.55
+core.pack.task: Packer task: initialize from command line() 
+core.pack.pack_rotamers: built 3293 rotamers at 42 positions.
+core.pack.interaction_graph.interaction_graph_factory: Instantiating DensePDInteractionGraph
+core.pack.interaction_graph.interaction_graph_factory: IG: 8851052 bytes
+core.optimization.Minimizer: [ WARNING ] LBFGS MAX CYCLES 2000 EXCEEDED, BUT FUNC NOT CONVERGED!
+protocols.relax.FastRelax: CMD: ramp_repack_min  -3452.16  4.0736  4.0736  0.011
+core.pack.task: Packer task: initialize from command line() 
+core.pack.pack_rotamers: built 2508 rotamers at 46 positions.
+core.pack.interaction_graph.interaction_graph_factory: Instantiating DensePDInteractionGraph
+core.pack.interaction_graph.interaction_graph_factory: IG: 4538000 bytes
+core.optimization.Minimizer: [ WARNING ] LBFGS MAX CYCLES 2000 EXCEEDED, BUT FUNC NOT CONVERGED!
+protocols.relax.FastRelax: CMD: ramp_repack_min  -2655.09  2.69041  2.69041  0.1375
+core.pack.task: Packer task: initialize from command line() 
+core.pack.pack_rotamers: built 2426 rotamers at 41 positions.
+core.pack.interaction_graph.interaction_graph_factory: Instantiating DensePDInteractionGraph
+core.pack.interaction_graph.interaction_graph_factory: IG: 4419472 bytes
+protocols.relax.FastRelax: CMD: ramp_repack_min  -2368  2.5173  2.5173  0.3025
+core.pack.task: Packer task: initialize from command line() 
+core.pack.pack_rotamers: built 2395 rotamers at 40 positions.
+core.pack.interaction_graph.interaction_graph_factory: Instantiating DensePDInteractionGraph
+core.pack.interaction_graph.interaction_graph_factory: IG: 4276820 bytes
+protocols.relax.FastRelax: CMD: ramp_repack_min  -2123.35  2.37614  2.37614  0.55
+protocols.relax.FastRelax: MRP: 0  -2123.35  -2123.35  2.37614  2.37614  
+protocols.relax.FastRelax: CMD: accept_to_best  -2123.35  2.37614  2.37614  0.55
+protocols.relax.FastRelax: CMD: endrepeat  -2123.35  2.37614  2.37614  0.55
+protocols::checkpoint: Deleting checkpoints of FastRelax
+protocols.rosetta_scripts.ParsedProtocol: setting status to success
+protocols.jd2.JobDistributor: 3gbm_HA_3gbn_Ab_minimize_0010 reported success in 1373 seconds
+protocols.jd2.JobDistributor: no more batches to process... 
+protocols.jd2.JobDistributor: 10 jobs considered, 10 jobs attempted in 13253 seconds
+protocols.jd2.JobDistributor: [ WARNING ] The following options have been set, but have not yet been used:
+	-docking:dock_mcm_rot_magnitude 5
+	-docking:dock_mcm_trans_magnitude 0.1
+	-run:max_retry_job 10
+

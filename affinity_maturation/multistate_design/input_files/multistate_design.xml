@@ -1,0 +1,51 @@
+<ROSETTASCRIPTS>
+	<SCOREFXNS>
+		<ScoreFunction name="talaris_cst" weights="ref2015.wts" >
+			<Reweight scoretype="res_type_constraint" weight="1.0" />
+		</ScoreFunction>
+	</SCOREFXNS>
+	<TASKOPERATIONS>
+		Include rotamer options from the command line
+		<InitializeFromCommandline name="ifcl" />
+	</TASKOPERATIONS>
+	<MOVERS>
+		Design mover to be used in multistate design
+		<PackRotamersMover name="design" scorefxn="talaris_cst" task_operations="ifcl" />
+		
+		Create MSDMovers to run multistate design - these different in the constraint weight, with later rounds
+		having a higher constraint value
+		<MSDMover name="msd1" design_mover="design" constraint_weight="0.5" resfiles="4HKX.resfile,3UBQ.resfile" />
+		<MSDMover name="msd2" design_mover="design" constraint_weight="1" resfiles="4HKX.resfile,3UBQ.resfile"/>
+		<MSDMover name="msd3" design_mover="design" constraint_weight="1.5" resfiles="4HKX.resfile,3UBQ.resfile" />
+		<MSDMover name="msd4" design_mover="design" constraint_weight="2" resfiles="4HKX.resfile,3UBQ.resfile" />	
+
+		FindConsensusSequence is needed at the end of the protocol to find a single sequence
+		that agrees with all target states
+		<FindConsensusSequence name="finish" scorefxn="talaris_cst" resfiles="4HKX.resfile,3UBQ.resfile" />
+
+		Analyze the resulting interface
+		<InterfaceAnalyzerMover name="analyze" scorefxn="REF2015" packstat="0" pack_input="0" pack_separated="1" fixedchains="H,L" />
+	</MOVERS>
+	<FILTERS>
+	</FILTERS>
+	<APPLY_TO_POSE>
+	</APPLY_TO_POSE>
+	<PROTOCOLS>
+		Run four rounds of design
+		<Add mover="msd1" />
+		
+		<Add mover="msd2" />
+		
+		<Add mover="msd3" />
+		
+		<Add mover="msd4" />
+		
+		Find a consensus sequence for all states
+		<Add mover="finish" />
+
+		Calculate interface metrics for the final sequence
+		<Add mover="analyze" />
+
+	</PROTOCOLS>
+	<OUTPUT scorefxn="REF2015" />
+</ROSETTASCRIPTS>

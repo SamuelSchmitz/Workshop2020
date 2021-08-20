@@ -1,0 +1,35 @@
+# BLASTP 2.7.1+
+# Query: grafting/l2.fasta
+# Database: /usr/people/sbioguest/rosetta_workshop/rosetta/tools/antibody//blast_database/database.L2.7
+# Fields: query acc.ver, subject acc.ver, % identity, alignment length, mismatches, gap opens, q. start, q. end, s. start, s. end, evalue, bit score
+# 29 hits found
+grafting/l2.fasta	pdb4npy_chothia.pdb	100.000	7	0	0	1	7	1	7	0.43	15.1
+grafting/l2.fasta	pdb4jzn_chothia.pdb	100.000	7	0	0	1	7	1	7	0.43	15.1
+grafting/l2.fasta	pdb4m5y_chothia.pdb	100.000	7	0	0	1	7	1	7	0.43	15.1
+grafting/l2.fasta	pdb2g75_chothia.pdb	100.000	7	0	0	1	7	1	7	0.43	15.1
+grafting/l2.fasta	pdb2dd8_chothia.pdb	100.000	7	0	0	1	7	1	7	0.43	15.1
+grafting/l2.fasta	pdb1w72_chothia.pdb	100.000	7	0	0	1	7	1	7	0.43	15.1
+grafting/l2.fasta	pdb4qci_chothia.pdb	85.714	7	1	0	1	7	1	7	0.91	14.2
+grafting/l2.fasta	pdb3nh7_chothia.pdb	85.714	7	1	0	1	7	1	7	0.91	14.2
+grafting/l2.fasta	pdb3ulv_chothia.pdb	71.429	7	2	0	1	7	1	7	1.2	13.8
+grafting/l2.fasta	pdb3ulu_chothia.pdb	71.429	7	2	0	1	7	1	7	1.2	13.8
+grafting/l2.fasta	pdb3uls_chothia.pdb	71.429	7	2	0	1	7	1	7	1.2	13.8
+grafting/l2.fasta	pdb3g6d_chothia.pdb	85.714	7	1	0	1	7	1	7	1.2	13.8
+grafting/l2.fasta	pdb3g6a_chothia.pdb	85.714	7	1	0	1	7	1	7	1.2	13.8
+grafting/l2.fasta	pdb1adq_chothia.pdb	85.714	7	1	0	1	7	1	7	1.7	13.4
+grafting/l2.fasta	pdb4wuk_chothia.pdb	100.000	6	0	0	2	7	2	7	1.8	13.4
+grafting/l2.fasta	pdb3sm5_chothia.pdb	100.000	6	0	0	2	7	2	7	1.8	13.4
+grafting/l2.fasta	pdb4dag_chothia.pdb	71.429	7	2	0	1	7	1	7	3.0	12.9
+grafting/l2.fasta	pdb3h0t_chothia.pdb	71.429	7	2	0	1	7	1	7	3.0	12.9
+grafting/l2.fasta	pdb2fl5_chothia.pdb	71.429	7	2	0	1	7	1	7	3.4	12.9
+grafting/l2.fasta	pdb3lqa_chothia.pdb	71.429	7	2	0	1	7	1	7	4.2	12.9
+grafting/l2.fasta	pdb3lmj_chothia.pdb	71.429	7	2	0	1	7	1	7	4.2	12.9
+grafting/l2.fasta	pdb4hpy_chothia.pdb	71.429	7	2	0	1	7	1	7	4.5	12.5
+grafting/l2.fasta	pdb3ujj_chothia.pdb	71.429	7	2	0	1	7	1	7	4.5	12.5
+grafting/l2.fasta	pdb4tvp_chothia.pdb	57.143	7	3	0	1	7	1	7	7.5	12.1
+grafting/l2.fasta	pdb3q6f_chothia.pdb	83.333	6	1	0	2	7	2	7	17	11.2
+grafting/l2.fasta	pdb3piq_chothia.pdb	83.333	6	1	0	2	7	2	7	17	11.2
+grafting/l2.fasta	pdb4r26_chothia.pdb	57.143	7	3	0	1	7	1	7	18	11.2
+grafting/l2.fasta	pdb5cex_chothia.pdb	57.143	7	3	0	1	7	1	7	18	11.2
+grafting/l2.fasta	pdb5cey_chothia.pdb	57.143	7	3	0	1	7	1	7	18	11.2
+# BLAST processed 1 queries

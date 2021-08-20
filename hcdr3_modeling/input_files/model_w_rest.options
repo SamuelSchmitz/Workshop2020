@@ -1,0 +1,21 @@
+-s 4m5y_renum.pdb  #starting pdb with loops to rebuild
+-loops:loop_file 4m5y_.loops #loop file
+-loops:extended true #force phi-psi angles to be set to 180 degrees independent of loop input file (recommended for production runs)
+-loops:idealize_after_loop_close #give idealized phi and psi angles after loop has been closed
+-loops:relax fastrelax #does a minimization of the structure in the torsion space
+-loops:fast #decreases the monte carlo inner and outer cycles of loop rebuilding, greatly decreasing computation time
+-out:file:fullatom #output file will be full-atom
+-ex1 #Include extra chi1 rotamers
+-ex2
+-nstruct 2 #number of models to build. 1000 recommended for production runs
+-loops:frag_sizes 9 3 1
+-loops:frag_files 4m5y_frags.200.9mers 4m5y_frags.200.3mers none 
+-loops:remodel quick_ccd
+-loops:refine refine_kic
+-score:weights talaris2014.wts
+-score:patch dihedral_cst.wts_patch
+-constraints:cst_file 4m5y_bulged.restraints
+-constraints:cst_weight 1
+-constraints:viol
+-constraints:viol_level 101
+-corrections::restore_talaris_behavior

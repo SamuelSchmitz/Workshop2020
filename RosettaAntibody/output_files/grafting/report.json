@@ -1,0 +1,922 @@
+{
+    "scs-results" : {
+        "h1" : [
+            {
+                "pdb" : "2xzc",
+                "padded" : false,
+                "struct_source" : "-",
+                "iso-type" : "-",
+                "bio-type" : "-",
+                "resolution" : 1.3999999999999999,
+                "identity" : 90.909000000000006,
+                "bit_score" : 21.399999999999999
+            },
+            {
+                "pdb" : "2xzc",
+                "padded" : false,
+                "struct_source" : "-",
+                "iso-type" : "-",
+                "bio-type" : "-",
+                "resolution" : 1.3999999999999999,
+                "identity" : 90.909000000000006,
+                "bit_score" : 21.399999999999999
+            },
+            {
+                "pdb" : "2xzc",
+                "padded" : false,
+                "struct_source" : "-",
+                "iso-type" : "-",
+                "bio-type" : "-",
+                "resolution" : 1.3999999999999999,
+                "identity" : 90.909000000000006,
+                "bit_score" : 21.399999999999999
+            },
+            {
+                "pdb" : "2xzc",
+                "padded" : false,
+                "struct_source" : "-",
+                "iso-type" : "-",
+                "bio-type" : "-",
+                "resolution" : 1.3999999999999999,
+                "identity" : 90.909000000000006,
+                "bit_score" : 21.399999999999999
+            },
+            {
+                "pdb" : "2xzc",
+                "padded" : false,
+                "struct_source" : "-",
+                "iso-type" : "-",
+                "bio-type" : "-",
+                "resolution" : 1.3999999999999999,
+                "identity" : 90.909000000000006,
+                "bit_score" : 21.399999999999999
+            },
+            {
+                "pdb" : "2xzc",
+                "padded" : false,
+                "struct_source" : "-",
+                "iso-type" : "-",
+                "bio-type" : "-",
+                "resolution" : 1.3999999999999999,
+                "identity" : 90.909000000000006,
+                "bit_score" : 21.399999999999999
+            },
+            {
+                "pdb" : "2xzc",
+                "padded" : false,
+                "struct_source" : "-",
+                "iso-type" : "-",
+                "bio-type" : "-",
+                "resolution" : 1.3999999999999999,
+                "identity" : 90.909000000000006,
+                "bit_score" : 21.399999999999999
+            },
+            {
+                "pdb" : "2xzc",
+                "padded" : false,
+                "struct_source" : "-",
+                "iso-type" : "-",
+                "bio-type" : "-",
+                "resolution" : 1.3999999999999999,
+                "identity" : 90.909000000000006,
+                "bit_score" : 21.399999999999999
+            },
+            {
+                "pdb" : "2xzc",
+                "padded" : false,
+                "struct_source" : "-",
+                "iso-type" : "-",
+                "bio-type" : "-",
+                "resolution" : 1.3999999999999999,
+                "identity" : 90.909000000000006,
+                "bit_score" : 21.399999999999999
+            },
+            {
+                "pdb" : "2xzc",
+                "padded" : false,
+                "struct_source" : "-",
+                "iso-type" : "-",
+                "bio-type" : "-",
+                "resolution" : 1.3999999999999999,
+                "identity" : 90.909000000000006,
+                "bit_score" : 21.399999999999999
+            }
+        ],
+        "h2" : [
+            {
+                "pdb" : "2xzc",
+                "padded" : false,
+                "struct_source" : "-",
+                "iso-type" : "-",
+                "bio-type" : "-",
+                "resolution" : 1.3999999999999999,
+                "identity" : 87.500000000000000,
+                "bit_score" : 29.100000000000001
+            },
+            {
+                "pdb" : "2xzc",
+                "padded" : false,
+                "struct_source" : "-",
+                "iso-type" : "-",
+                "bio-type" : "-",
+                "resolution" : 1.3999999999999999,
+                "identity" : 87.500000000000000,
+                "bit_score" : 29.100000000000001
+            },
+            {
+                "pdb" : "2xzc",
+                "padded" : false,
+                "struct_source" : "-",
+                "iso-type" : "-",
+                "bio-type" : "-",
+                "resolution" : 1.3999999999999999,
+                "identity" : 87.500000000000000,
+                "bit_score" : 29.100000000000001
+            },
+            {
+                "pdb" : "2xzc",
+                "padded" : false,
+                "struct_source" : "-",
+                "iso-type" : "-",
+                "bio-type" : "-",
+                "resolution" : 1.3999999999999999,
+                "identity" : 87.500000000000000,
+                "bit_score" : 29.100000000000001
+            },
+            {
+                "pdb" : "2xzc",
+                "padded" : false,
+                "struct_source" : "-",
+                "iso-type" : "-",
+                "bio-type" : "-",
+                "resolution" : 1.3999999999999999,
+                "identity" : 87.500000000000000,
+                "bit_score" : 29.100000000000001
+            },
+            {
+                "pdb" : "2xzc",
+                "padded" : false,
+                "struct_source" : "-",
+                "iso-type" : "-",
+                "bio-type" : "-",
+                "resolution" : 1.3999999999999999,
+                "identity" : 87.500000000000000,
+                "bit_score" : 29.100000000000001
+            },
+            {
+                "pdb" : "2xzc",
+                "padded" : false,
+                "struct_source" : "-",
+                "iso-type" : "-",
+                "bio-type" : "-",
+                "resolution" : 1.3999999999999999,
+                "identity" : 87.500000000000000,
+                "bit_score" : 29.100000000000001
+            },
+            {
+                "pdb" : "2xzc",
+                "padded" : false,
+                "struct_source" : "-",
+                "iso-type" : "-",
+                "bio-type" : "-",
+                "resolution" : 1.3999999999999999,
+                "identity" : 87.500000000000000,
+                "bit_score" : 29.100000000000001
+            },
+            {
+                "pdb" : "2xzc",
+                "padded" : false,
+                "struct_source" : "-",
+                "iso-type" : "-",
+                "bio-type" : "-",
+                "resolution" : 1.3999999999999999,
+                "identity" : 87.500000000000000,
+                "bit_score" : 29.100000000000001
+            },
+            {
+                "pdb" : "2xzc",
+                "padded" : false,
+                "struct_source" : "-",
+                "iso-type" : "-",
+                "bio-type" : "-",
+                "resolution" : 1.3999999999999999,
+                "identity" : 87.500000000000000,
+                "bit_score" : 29.100000000000001
+            }
+        ],
+        "h3" : [
+            {
+                "pdb" : "4ztp",
+                "padded" : false,
+                "struct_source" : "-",
+                "iso-type" : "-",
+                "bio-type" : "-",
+                "resolution" : 1.6299999999999999,
+                "identity" : 50.000000000000000,
+                "bit_score" : 13.400000000000000
+            },
+            {
+                "pdb" : "4ztp",
+                "padded" : false,
+                "struct_source" : "-",
+                "iso-type" : "-",
+                "bio-type" : "-",
+                "resolution" : 1.6299999999999999,
+                "identity" : 50.000000000000000,
+                "bit_score" : 13.400000000000000
+            },
+            {
+                "pdb" : "4ztp",
+                "padded" : false,
+                "struct_source" : "-",
+                "iso-type" : "-",
+                "bio-type" : "-",
+                "resolution" : 1.6299999999999999,
+                "identity" : 50.000000000000000,
+                "bit_score" : 13.400000000000000
+            },
+            {
+                "pdb" : "4ztp",
+                "padded" : false,
+                "struct_source" : "-",
+                "iso-type" : "-",
+                "bio-type" : "-",
+                "resolution" : 1.6299999999999999,
+                "identity" : 50.000000000000000,
+                "bit_score" : 13.400000000000000
+            },
+            {
+                "pdb" : "4ztp",
+                "padded" : false,
+                "struct_source" : "-",
+                "iso-type" : "-",
+                "bio-type" : "-",
+                "resolution" : 1.6299999999999999,
+                "identity" : 50.000000000000000,
+                "bit_score" : 13.400000000000000
+            },
+            {
+                "pdb" : "4ztp",
+                "padded" : false,
+                "struct_source" : "-",
+                "iso-type" : "-",
+                "bio-type" : "-",
+                "resolution" : 1.6299999999999999,
+                "identity" : 50.000000000000000,
+                "bit_score" : 13.400000000000000
+            },
+            {
+                "pdb" : "4ztp",
+                "padded" : false,
+                "struct_source" : "-",
+                "iso-type" : "-",
+                "bio-type" : "-",
+                "resolution" : 1.6299999999999999,
+                "identity" : 50.000000000000000,
+                "bit_score" : 13.400000000000000
+            },
+            {
+                "pdb" : "4ztp",
+                "padded" : false,
+                "struct_source" : "-",
+                "iso-type" : "-",
+                "bio-type" : "-",
+                "resolution" : 1.6299999999999999,
+                "identity" : 50.000000000000000,
+                "bit_score" : 13.400000000000000
+            },
+            {
+                "pdb" : "4ztp",
+                "padded" : false,
+                "struct_source" : "-",
+                "iso-type" : "-",
+                "bio-type" : "-",
+                "resolution" : 1.6299999999999999,
+                "identity" : 50.000000000000000,
+                "bit_score" : 13.400000000000000
+            },
+            {
+                "pdb" : "4ztp",
+                "padded" : false,
+                "struct_source" : "-",
+                "iso-type" : "-",
+                "bio-type" : "-",
+                "resolution" : 1.6299999999999999,
+                "identity" : 50.000000000000000,
+                "bit_score" : 13.400000000000000
+            }
+        ],
+        "l1" : [
+            {
+                "pdb" : "1w72",
+                "padded" : false,
+                "struct_source" : "-",
+                "iso-type" : "-",
+                "bio-type" : "-",
+                "resolution" : 2.1000000000000001,
+                "identity" : 63.636000000000003,
+                "bit_score" : 17.199999999999999
+            },
+            {
+                "pdb" : "1w72",
+                "padded" : false,
+                "struct_source" : "-",
+                "iso-type" : "-",
+                "bio-type" : "-",
+                "resolution" : 2.1000000000000001,
+                "identity" : 63.636000000000003,
+                "bit_score" : 17.199999999999999
+            },
+            {
+                "pdb" : "1w72",
+                "padded" : false,
+                "struct_source" : "-",
+                "iso-type" : "-",
+                "bio-type" : "-",
+                "resolution" : 2.1000000000000001,
+                "identity" : 63.636000000000003,
+                "bit_score" : 17.199999999999999
+            },
+            {
+                "pdb" : "1w72",
+                "padded" : false,
+                "struct_source" : "-",
+                "iso-type" : "-",
+                "bio-type" : "-",
+                "resolution" : 2.1000000000000001,
+                "identity" : 63.636000000000003,
+                "bit_score" : 17.199999999999999
+            },
+            {
+                "pdb" : "1w72",
+                "padded" : false,
+                "struct_source" : "-",
+                "iso-type" : "-",
+                "bio-type" : "-",
+                "resolution" : 2.1000000000000001,
+                "identity" : 63.636000000000003,
+                "bit_score" : 17.199999999999999
+            },
+            {
+                "pdb" : "1w72",
+                "padded" : false,
+                "struct_source" : "-",
+                "iso-type" : "-",
+                "bio-type" : "-",
+                "resolution" : 2.1000000000000001,
+                "identity" : 63.636000000000003,
+                "bit_score" : 17.199999999999999
+            },
+            {
+                "pdb" : "1w72",
+                "padded" : false,
+                "struct_source" : "-",
+                "iso-type" : "-",
+                "bio-type" : "-",
+                "resolution" : 2.1000000000000001,
+                "identity" : 63.636000000000003,
+                "bit_score" : 17.199999999999999
+            },
+            {
+                "pdb" : "1w72",
+                "padded" : false,
+                "struct_source" : "-",
+                "iso-type" : "-",
+                "bio-type" : "-",
+                "resolution" : 2.1000000000000001,
+                "identity" : 63.636000000000003,
+                "bit_score" : 17.199999999999999
+            },
+            {
+                "pdb" : "1w72",
+                "padded" : false,
+                "struct_source" : "-",
+                "iso-type" : "-",
+                "bio-type" : "-",
+                "resolution" : 2.1000000000000001,
+                "identity" : 63.636000000000003,
+                "bit_score" : 17.199999999999999
+            },
+            {
+                "pdb" : "1w72",
+                "padded" : false,
+                "struct_source" : "-",
+                "iso-type" : "-",
+                "bio-type" : "-",
+                "resolution" : 2.1000000000000001,
+                "identity" : 63.636000000000003,
+                "bit_score" : 17.199999999999999
+            }
+        ],
+        "l2" : [
+            {
+                "pdb" : "4npy",
+                "padded" : false,
+                "struct_source" : "-",
+                "iso-type" : "-",
+                "bio-type" : "-",
+                "resolution" : 1.8000000000000000,
+                "identity" : 100.00000000000000,
+                "bit_score" : 15.100000000000000
+            },
+            {
+                "pdb" : "4npy",
+                "padded" : false,
+                "struct_source" : "-",
+                "iso-type" : "-",
+                "bio-type" : "-",
+                "resolution" : 1.8000000000000000,
+                "identity" : 100.00000000000000,
+                "bit_score" : 15.100000000000000
+            },
+            {
+                "pdb" : "4npy",
+                "padded" : false,
+                "struct_source" : "-",
+                "iso-type" : "-",
+                "bio-type" : "-",
+                "resolution" : 1.8000000000000000,
+                "identity" : 100.00000000000000,
+                "bit_score" : 15.100000000000000
+            },
+            {
+                "pdb" : "4npy",
+                "padded" : false,
+                "struct_source" : "-",
+                "iso-type" : "-",
+                "bio-type" : "-",
+                "resolution" : 1.8000000000000000,
+                "identity" : 100.00000000000000,
+                "bit_score" : 15.100000000000000
+            },
+            {
+                "pdb" : "4npy",
+                "padded" : false,
+                "struct_source" : "-",
+                "iso-type" : "-",
+                "bio-type" : "-",
+                "resolution" : 1.8000000000000000,
+                "identity" : 100.00000000000000,
+                "bit_score" : 15.100000000000000
+            },
+            {
+                "pdb" : "4npy",
+                "padded" : false,
+                "struct_source" : "-",
+                "iso-type" : "-",
+                "bio-type" : "-",
+                "resolution" : 1.8000000000000000,
+                "identity" : 100.00000000000000,
+                "bit_score" : 15.100000000000000
+            },
+            {
+                "pdb" : "4npy",
+                "padded" : false,
+                "struct_source" : "-",
+                "iso-type" : "-",
+                "bio-type" : "-",
+                "resolution" : 1.8000000000000000,
+                "identity" : 100.00000000000000,
+                "bit_score" : 15.100000000000000
+            },
+            {
+                "pdb" : "4npy",
+                "padded" : false,
+                "struct_source" : "-",
+                "iso-type" : "-",
+                "bio-type" : "-",
+                "resolution" : 1.8000000000000000,
+                "identity" : 100.00000000000000,
+                "bit_score" : 15.100000000000000
+            },
+            {
+                "pdb" : "4npy",
+                "padded" : false,
+                "struct_source" : "-",
+                "iso-type" : "-",
+                "bio-type" : "-",
+                "resolution" : 1.8000000000000000,
+                "identity" : 100.00000000000000,
+                "bit_score" : 15.100000000000000
+            },
+            {
+                "pdb" : "4npy",
+                "padded" : false,
+                "struct_source" : "-",
+                "iso-type" : "-",
+                "bio-type" : "-",
+                "resolution" : 1.8000000000000000,
+                "identity" : 100.00000000000000,
+                "bit_score" : 15.100000000000000
+            }
+        ],
+        "l3" : [
+            {
+                "pdb" : "4wuk",
+                "padded" : false,
+                "struct_source" : "-",
+                "iso-type" : "-",
+                "bio-type" : "-",
+                "resolution" : 1.7000000000000000,
+                "identity" : 54.545000000000002,
+                "bit_score" : 16.300000000000001
+            },
+            {
+                "pdb" : "4wuk",
+                "padded" : false,
+                "struct_source" : "-",
+                "iso-type" : "-",
+                "bio-type" : "-",
+                "resolution" : 1.7000000000000000,
+                "identity" : 54.545000000000002,
+                "bit_score" : 16.300000000000001
+            },
+            {
+                "pdb" : "4wuk",
+                "padded" : false,
+                "struct_source" : "-",
+                "iso-type" : "-",
+                "bio-type" : "-",
+                "resolution" : 1.7000000000000000,
+                "identity" : 54.545000000000002,
+                "bit_score" : 16.300000000000001
+            },
+            {
+                "pdb" : "4wuk",
+                "padded" : false,
+                "struct_source" : "-",
+                "iso-type" : "-",
+                "bio-type" : "-",
+                "resolution" : 1.7000000000000000,
+                "identity" : 54.545000000000002,
+                "bit_score" : 16.300000000000001
+            },
+            {
+                "pdb" : "4wuk",
+                "padded" : false,
+                "struct_source" : "-",
+                "iso-type" : "-",
+                "bio-type" : "-",
+                "resolution" : 1.7000000000000000,
+                "identity" : 54.545000000000002,
+                "bit_score" : 16.300000000000001
+            },
+            {
+                "pdb" : "4wuk",
+                "padded" : false,
+                "struct_source" : "-",
+                "iso-type" : "-",
+                "bio-type" : "-",
+                "resolution" : 1.7000000000000000,
+                "identity" : 54.545000000000002,
+                "bit_score" : 16.300000000000001
+            },
+            {
+                "pdb" : "4wuk",
+                "padded" : false,
+                "struct_source" : "-",
+                "iso-type" : "-",
+                "bio-type" : "-",
+                "resolution" : 1.7000000000000000,
+                "identity" : 54.545000000000002,
+                "bit_score" : 16.300000000000001
+            },
+            {
+                "pdb" : "4wuk",
+                "padded" : false,
+                "struct_source" : "-",
+                "iso-type" : "-",
+                "bio-type" : "-",
+                "resolution" : 1.7000000000000000,
+                "identity" : 54.545000000000002,
+                "bit_score" : 16.300000000000001
+            },
+            {
+                "pdb" : "4wuk",
+                "padded" : false,
+                "struct_source" : "-",
+                "iso-type" : "-",
+                "bio-type" : "-",
+                "resolution" : 1.7000000000000000,
+                "identity" : 54.545000000000002,
+                "bit_score" : 16.300000000000001
+            },
+            {
+                "pdb" : "4wuk",
+                "padded" : false,
+                "struct_source" : "-",
+                "iso-type" : "-",
+                "bio-type" : "-",
+                "resolution" : 1.7000000000000000,
+                "identity" : 54.545000000000002,
+                "bit_score" : 16.300000000000001
+            }
+        ],
+        "frh" : [
+            {
+                "pdb" : "3zl4",
+                "padded" : false,
+                "struct_source" : "-",
+                "iso-type" : "-",
+                "bio-type" : "-",
+                "resolution" : 1.9500000000000000,
+                "identity" : 88.888999999999996,
+                "bit_score" : 114.00000000000000
+            },
+            {
+                "pdb" : "3zl4",
+                "padded" : false,
+                "struct_source" : "-",
+                "iso-type" : "-",
+                "bio-type" : "-",
+                "resolution" : 1.9500000000000000,
+                "identity" : 88.888999999999996,
+                "bit_score" : 114.00000000000000
+            },
+            {
+                "pdb" : "3zl4",
+                "padded" : false,
+                "struct_source" : "-",
+                "iso-type" : "-",
+                "bio-type" : "-",
+                "resolution" : 1.9500000000000000,
+                "identity" : 88.888999999999996,
+                "bit_score" : 114.00000000000000
+            },
+            {
+                "pdb" : "3zl4",
+                "padded" : false,
+                "struct_source" : "-",
+                "iso-type" : "-",
+                "bio-type" : "-",
+                "resolution" : 1.9500000000000000,
+                "identity" : 88.888999999999996,
+                "bit_score" : 114.00000000000000
+            },
+            {
+                "pdb" : "3zl4",
+                "padded" : false,
+                "struct_source" : "-",
+                "iso-type" : "-",
+                "bio-type" : "-",
+                "resolution" : 1.9500000000000000,
+                "identity" : 88.888999999999996,
+                "bit_score" : 114.00000000000000
+            },
+            {
+                "pdb" : "3zl4",
+                "padded" : false,
+                "struct_source" : "-",
+                "iso-type" : "-",
+                "bio-type" : "-",
+                "resolution" : 1.9500000000000000,
+                "identity" : 88.888999999999996,
+                "bit_score" : 114.00000000000000
+            },
+            {
+                "pdb" : "3zl4",
+                "padded" : false,
+                "struct_source" : "-",
+                "iso-type" : "-",
+                "bio-type" : "-",
+                "resolution" : 1.9500000000000000,
+                "identity" : 88.888999999999996,
+                "bit_score" : 114.00000000000000
+            },
+            {
+                "pdb" : "3zl4",
+                "padded" : false,
+                "struct_source" : "-",
+                "iso-type" : "-",
+                "bio-type" : "-",
+                "resolution" : 1.9500000000000000,
+                "identity" : 88.888999999999996,
+                "bit_score" : 114.00000000000000
+            },
+            {
+                "pdb" : "3zl4",
+                "padded" : false,
+                "struct_source" : "-",
+                "iso-type" : "-",
+                "bio-type" : "-",
+                "resolution" : 1.9500000000000000,
+                "identity" : 88.888999999999996,
+                "bit_score" : 114.00000000000000
+            },
+            {
+                "pdb" : "3zl4",
+                "padded" : false,
+                "struct_source" : "-",
+                "iso-type" : "-",
+                "bio-type" : "-",
+                "resolution" : 1.9500000000000000,
+                "identity" : 88.888999999999996,
+                "bit_score" : 114.00000000000000
+            }
+        ],
+        "frl" : [
+            {
+                "pdb" : "4npy",
+                "padded" : false,
+                "struct_source" : "-",
+                "iso-type" : "-",
+                "bio-type" : "-",
+                "resolution" : 1.8000000000000000,
+                "identity" : 93.102999999999994,
+                "bit_score" : 114.00000000000000
+            },
+            {
+                "pdb" : "4npy",
+                "padded" : false,
+                "struct_source" : "-",
+                "iso-type" : "-",
+                "bio-type" : "-",
+                "resolution" : 1.8000000000000000,
+                "identity" : 93.102999999999994,
+                "bit_score" : 114.00000000000000
+            },
+            {
+                "pdb" : "4npy",
+                "padded" : false,
+                "struct_source" : "-",
+                "iso-type" : "-",
+                "bio-type" : "-",
+                "resolution" : 1.8000000000000000,
+                "identity" : 93.102999999999994,
+                "bit_score" : 114.00000000000000
+            },
+            {
+                "pdb" : "4npy",
+                "padded" : false,
+                "struct_source" : "-",
+                "iso-type" : "-",
+                "bio-type" : "-",
+                "resolution" : 1.8000000000000000,
+                "identity" : 93.102999999999994,
+                "bit_score" : 114.00000000000000
+            },
+            {
+                "pdb" : "4npy",
+                "padded" : false,
+                "struct_source" : "-",
+                "iso-type" : "-",
+                "bio-type" : "-",
+                "resolution" : 1.8000000000000000,
+                "identity" : 93.102999999999994,
+                "bit_score" : 114.00000000000000
+            },
+            {
+                "pdb" : "4npy",
+                "padded" : false,
+                "struct_source" : "-",
+                "iso-type" : "-",
+                "bio-type" : "-",
+                "resolution" : 1.8000000000000000,
+                "identity" : 93.102999999999994,
+                "bit_score" : 114.00000000000000
+            },
+            {
+                "pdb" : "4npy",
+                "padded" : false,
+                "struct_source" : "-",
+                "iso-type" : "-",
+                "bio-type" : "-",
+                "resolution" : 1.8000000000000000,
+                "identity" : 93.102999999999994,
+                "bit_score" : 114.00000000000000
+            },
+            {
+                "pdb" : "4npy",
+                "padded" : false,
+                "struct_source" : "-",
+                "iso-type" : "-",
+                "bio-type" : "-",
+                "resolution" : 1.8000000000000000,
+                "identity" : 93.102999999999994,
+                "bit_score" : 114.00000000000000
+            },
+            {
+                "pdb" : "4npy",
+                "padded" : false,
+                "struct_source" : "-",
+                "iso-type" : "-",
+                "bio-type" : "-",
+                "resolution" : 1.8000000000000000,
+                "identity" : 93.102999999999994,
+                "bit_score" : 114.00000000000000
+            },
+            {
+                "pdb" : "4npy",
+                "padded" : false,
+                "struct_source" : "-",
+                "iso-type" : "-",
+                "bio-type" : "-",
+                "resolution" : 1.8000000000000000,
+                "identity" : 93.102999999999994,
+                "bit_score" : 114.00000000000000
+            }
+        ],
+        "orientation" : [
+            {
+                "pdb" : "4npy",
+                "padded" : false,
+                "struct_source" : "-",
+                "iso-type" : "-",
+                "bio-type" : "-",
+                "resolution" : 1.8000000000000000,
+                "identity" : 69.507000000000005,
+                "bit_score" : 263.00000000000000
+            },
+            {
+                "pdb" : "3zl4",
+                "padded" : false,
+                "struct_source" : "-",
+                "iso-type" : "-",
+                "bio-type" : "-",
+                "resolution" : 1.9500000000000000,
+                "identity" : 63.256000000000000,
+                "bit_score" : 241.00000000000000
+            },
+            {
+                "pdb" : "2xzc",
+                "padded" : false,
+                "struct_source" : "-",
+                "iso-type" : "-",
+                "bio-type" : "-",
+                "resolution" : 1.3999999999999999,
+                "identity" : 62.790999999999997,
+                "bit_score" : 239.00000000000000
+            },
+            {
+                "pdb" : "2xza",
+                "padded" : false,
+                "struct_source" : "-",
+                "iso-type" : "-",
+                "bio-type" : "-",
+                "resolution" : 1.5000000000000000,
+                "identity" : 62.790999999999997,
+                "bit_score" : 239.00000000000000
+            },
+            {
+                "pdb" : "1w72",
+                "padded" : false,
+                "struct_source" : "-",
+                "iso-type" : "-",
+                "bio-type" : "-",
+                "resolution" : 2.1000000000000001,
+                "identity" : 57.476999999999997,
+                "bit_score" : 213.00000000000000
+            },
+            {
+                "pdb" : "3uls",
+                "padded" : false,
+                "struct_source" : "-",
+                "iso-type" : "-",
+                "bio-type" : "-",
+                "resolution" : 2.5000000000000000,
+                "identity" : 59.722000000000001,
+                "bit_score" : 212.00000000000000
+            },
+            {
+                "pdb" : "4gsd",
+                "padded" : false,
+                "struct_source" : "-",
+                "iso-type" : "-",
+                "bio-type" : "-",
+                "resolution" : 2.2500000000000000,
+                "identity" : 61.033000000000001,
+                "bit_score" : 209.00000000000000
+            },
+            {
+                "pdb" : "3go1",
+                "padded" : false,
+                "struct_source" : "-",
+                "iso-type" : "-",
+                "bio-type" : "-",
+                "resolution" : 1.8899999999999999,
+                "identity" : 54.673000000000002,
+                "bit_score" : 203.00000000000000
+            },
+            {
+                "pdb" : "1qlr",
+                "padded" : false,
+                "struct_source" : "-",
+                "iso-type" : "-",
+                "bio-type" : "-",
+                "resolution" : 2.7999999999999998,
+                "identity" : 56.481000000000002,
+                "bit_score" : 198.00000000000000
+            },
+            {
+                "pdb" : "1dn0",
+                "padded" : false,
+                "struct_source" : "-",
+                "iso-type" : "-",
+                "bio-type" : "-",
+                "resolution" : 2.2999999999999998,
+                "identity" : 56.481000000000002,
+                "bit_score" : 198.00000000000000
+            }
+        ]
+    }
+}

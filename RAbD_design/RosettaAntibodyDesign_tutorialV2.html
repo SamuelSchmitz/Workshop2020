@@ -1,0 +1,1623 @@
+<h1 id="rosettaantibodydesign">RosettaAntibodyDesign</h1>
+<p><strong>Bold text means that these files and/or this information is provided.</strong></p>
+<p><em>Italicized text means that this material will NOT be conducted during the workshop</em></p>
+<pre><code>fixed width text means you should type the command into your terminal
+</code></pre>
+<p>If you want to try making files that already exist (e.g., input files), write them to a different directory! (mkdir my_dir)</p>
+<h2 id="authors">Authors</h2>
+<ul>
+<li>Tutorial and Program Author:
+<ul>
+<li>Jared Adolf_Bryfogle (<a href="mailto:jadolfbr@gmail.com">jadolfbr@gmail.com</a>)</li>
+</ul></li>
+<li>Corresponding PI:
+<ul>
+<li>Roland Dunbrack (<a href="mailto:roland.dunbrack@fccc.edu">roland.dunbrack@fccc.edu</a>)</li>
+<li>Bill Schief (<a href="mailto:schief@scripps.edu">schief@scripps.edu</a>)</li>
+</ul></li>
+</ul>
+<h2 id="citation">Citation</h2>
+<p><a href="http://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1006112">Rosetta Antibody Design (RAbD): A General Framework for Computational Antibody Design, PLOS Computational Biology, 4/27/2018</a></p>
+<p>Jared Adolf-Bryfogle, Oleks Kalyuzhniy, Michael Kubitz, Brian D. Weitzner, Xiaozhen Hu, Yumiko Adachi, William R. Schief, Roland L. Dunbrack Jr.</p>
+<h1 id="overview">Overview</h1>
+<p><strong>RosettaAntibodyDesign (RAbD)</strong> is a generalized framework for the design of antibodies, in which a user can easily tailor the run to their project needs. <strong>The algorithm is meant to sample the diverse sequence, structure, and binding space of an antibody-antigen complex.</strong> An app is available, and all components can be used within RosettaScripts for easy scripting of antibody design and incorporation into other Rosetta protocols.</p>
+<p>The framework is based on rigorous bioinformatic analysis and rooted very much on our <a href="https://www.ncbi.nlm.nih.gov/pubmed/21035459">recent clustering</a> of antibody CDR regions. It uses the <strong>North/Dunbrack CDR definition</strong> as outlined in the North/Dunbrack clustering paper. A new clustering paper will be out in the next year, and this new analysis will be incorporated into RAbD.</p>
+<p>The supplemental methods section of the published paper has all details of the RosettaAntibodyDesign method. This manual serves to get you started running RAbD in typical use fashions.</p>
+<h1 id="algorithm">Algorithm</h1>
+<p>Broadly, the RAbD protocol consists of alternating outer and inner Monte Carlo cycles. Each outer cycle consists of randomly choosing a CDR (L1, L2, etc.) from those CDRs set to design, randomly choosing a cluster and then a structure from that cluster from the database according to the input instructions, and optionally grafting that CDR's structure onto the antibody framework in place of the existing CDR (<strong>GraftDesign</strong>). The program then performs N rounds of the inner cycle, consisting of sequence design (<strong>SeqDesign</strong>) using cluster-based sequence profiles and structural constraints, energy minimization, and optional docking. Each inner cycle structurally optimizes the backbone and repacks side chains of the CDR chosen in the outer cycle as well as optional neighbors in order to optimize interactions of the CDR with the antigen and other CDRs.</p>
+<p><strong>Backbone dihedral angle (CircularHarmonic) constraints</strong> derived from the cluster data are applied to each CDR to limit deleterious structural perturbations. Amino acid changes are typically sampled from <strong>profiles derived for each CDR cluster in PyIgClassify</strong>. Conservative amino acid substitutions (according to the BLOSUM62 substitution matrix) may be performed when too few sequences are available to produce a profile (e.g., for H3). After each inner cycle is completed, the new sequence and structure are accepted according to the Metropolis Monte Carlo criterion. After N rounds within the inner cycle, the program returns to the outer cycle, at which point the energy of the resulting design is compared to the previous design in the outer cycle. The new design is accepted or rejected according to the Monte Carlo criterion.</p>
+<p>If optimizing the antibody-antigen orientation during the design (dock), SiteConstraints are automatically used to keep the CDRs (paratope) facing the antigen surface. These are termed <strong>ParatopeSiteConstraints</strong>. Optionally, one can enable constraints that keep the paratope of the antibody around a target epitope (antigen binding site). These are called <strong>ParatopeEpitopeSiteConstraints</strong> as the constraints are between the paratope and the epitope. The epitope is automatically determined as the interface residues around the paratope on input into the program, however, any residue(s) can be set as the epitope to limit unwanted movement and sampling of the antibody. See the examples and options below.</p>
+<p>More detail on the algorithm can be found in the published paper.</p>
+<h1 id="general-setup-and-inputs">General Setup and Inputs</h1>
+<ol>
+<li><p>Antibody Design Database</p>
+<p>This app requires the Rosetta Antibody Design Database. A database of antibodies from the original North Clustering paper is included in Rosetta and is used as the default . An updated database (which is currently updated bi-yearly) can be downloaded here: <a href="http://dunbrack2.fccc.edu/PyIgClassify/">http://dunbrack2.fccc.edu/PyIgClassify/</a>.</p>
+<p>It should be placed in <code>~/rosetta_workshop/rosetta/gmain/database/sampling/antibodies/</code> It is recommended to use this up-to-date database for production runs. For this tutorial, we will use the database within Rosetta.</p></li>
+<li><p>Starting Structure</p>
+<p>The protocol begins with the three-dimensional structure of an antibody-antigen complex. Designs should start with an antibody bound to a target antigen (however optimizing just the antibody without the complex is also possible). Camelid antibodies are fully supported. This structure may be an experimental structure of an existing antibody in complex with its antigen, a predicted structure of an existing antibody docked computationally to its antigen, or even the best scoring result of low-resolution docking a large number of unrelated antibodies to a desired epitope on the structure of a target antigen as a prelude to de novo design.</p>
+<p>The program CAN computationally design an antibody to anywhere on the target protein, but it is recommended to place the antibody at the target epitope. It is beyond the scope of this program to determine potential epitopes for binding, however servers and programs exist to predict these. Automatic SiteConstraints can be used to further limit the design to target regions.</p></li>
+<li><p>Model Numbering and Light Chain identification</p>
+<p>The input PDB file must be renumbered to the AHo Scheme and the light chain gene must be identified. This can be done through the <a href="http://dunbrack2.fccc.edu/pyigclassify/">PyIgClassify Server</a>.</p>
+<p>On input into the program, Rosetta assigns our CDR clusters using the same methodology as PyIgClassify. The RosettaAntibodyDesign protocol is then driven by a set of command-line options and a set of design instructions provided as an input file that controls which CDR(s) are designed and how. Details and example command lines and instruction files are provided below.</p>
+<p>The gene of the light chain should always be set on the command-line using the option <code>-light_chain</code>, these are either lamda or kappa. PyIgClassify will identify the gene of the light chain.</p>
+<p>For this tutorial, the starting antibody is renumbered for you.</p></li>
+<li><p>Notes for Tutorial Shortening</p>
+<p>Always set the option, <code>-outer_cycle_rounds</code> to 5 in order to run these examples quickly. The default is 25. We include this in our common options file that is read in by Rosetta at the start. We will only be outputting a single structure, but typical use of the protocol is with default settings of <code>-outer_cycle_rounds</code> and an <code>nstruct</code> of at least 1000, with 5000-10000 recommended for jobs that are doing a lot of grafting. For De-novo design runs, one would want to go even higher. Note that the Docking stage increases runtime significantly as well.</p>
+<p>The total number of rounds is outer_cycle_rounds * nstruct.</p></li>
+<li><p>General Notes</p>
+<p>This tutorial assumes that you have Rosetta added to your PATH variable, as this is how Rosetta is generally run. If you do not already have this done, add the rosetta applications to your path. For the Meilerlab workshop (tcsh shell), do this:</p>
+<pre><code>    setenv PATH ${PATH}:${HOME}/rosetta_workshop/rosetta/main/source/bin
+    setenv PATH ${PATH}:${HOME}/rosetta_workshop/rosetta/main/source/tools
+</code></pre></li>
+</ol>
+<p>alternatively, for bash shell users:</p>
+<pre><code>        export PATH=${HOME}/rosetta_workshop/rosetta/main/source/bin:$PATH
+        export PATH=${HOME}/rosetta_workshop/rosetta/main/source/tools:$PATH
+
+Rosetta is assumed to be installed at ${HOME}/rosetta_workshop/rosetta
+
+We will be using JSON output of the scorefile, as this is much easier to work with in python and pandas.
+We use the option `-scorefile_format json`
+
+All of our common options for the tutorial are in the common file that you will copy to your working directory. 
+Rosetta will look for this file in your working directory or your home folder in the directory `$HOME/.rosetta/flags`.
+See this page for more info on using rosetta with custom config files: &lt;https://www.rosettacommons.org/docs/latest/rosetta_basics/running-rosetta-with-options#common-options-and-default-user-configuration&gt;
+
+All tutorials have generated output in output_files and their approximate time to finish on a single (core i7) processor.
+</code></pre>
+<h1 id="tutorial">Tutorial</h1>
+<h2 id="tutorial-a-general-design">Tutorial A: General Design</h2>
+<p>In many of these examples, we will use the application for simplicity, however, ALL options are available using the AntibodyDesignMover. XML lines are given if you are more comfortable in RosettaScripts. A skeleton XML file is provided for you if you want to go the RosettaScripts route. Note that the mover does not run InterfaceAnalyzer to report interface scores at the end of the run in the tutorial version of Rosetta. This is changed in the most current version of Rosetta. <a href="https://www.rosettacommons.org/docs/latest/scripting_documentation/RosettaScripts/Movers/movers_pages/antibodies/AntibodyDesignMover">AntibodyDesignMover</a></p>
+<p>You must still use the <code>-light_chain</code> command-line option.</p>
+<p>Lets copy the files we need first:</p>
+<pre><code>    mkdir work_dir
+    cd work_dir
+    cp ../input_files/my_ab.pdb .
+    cp ../input_files/color_cdrs.pml .
+    cp ../input_files/rabd.xml .
+    cp ../input_files/common .
+</code></pre>
+<p>You are starting design on a new antibody, that is not bound to the antigen in the crystal. This is difficult and risky, but we review how one could go about this anyway. We start by selecting a framework. Here, we use the trastuzumab framework as it expresses well, is thermodynamically stable with a Tm of 69.5 degrees, and has been shown repeatedly that it can tolerate CDRs of different sequence and structure. Note that the energy of the complex is high as we are starting from a manual placement of the antibody to antigen. If we relax the structure too much, we will fall into an energy well that is hard to escape without significant sampling.</p>
+<p>We are using an arbitrary protein at an arbitrary site for design. The PDB of our target is 1qaw. 1qaw is an oligomer of the TRP RNA-Binding Attenuation Protein from Bacillus Stearothermophilus. It is usually a monomer/dimer, but at its multimeric interface is a tryptophan residue by itself. As TRP rises, the probability of finding a fully oligomeric complex increases, which in this state helps to decrease TRP production through the TRP-operon regulatory mechanism.</p>
+<p>It's a beautiful protein, with a cool mechanism. We will attempt to build an antibody to bind to two subunits to stabilize the dimeric state of the complex in the absence of TRP. Note that denovo design currently takes a large amount of processing power. Each tutorial below is more complex than the one before it. The examples we have for this tutorial are short runs to show HOW it can be done, but more outer_cycle_rounds and nstruct would produce far better models than the ones you will see here - as we will need to sample the relative orientation of the antibody-antigen complex through docking, the CDR clusters and lengths, the internal backbone degrees of freedom of the CDRs, as well as the sequence of the CDRs and possibly the framework. As you can tell, just the sampling problem alone is difficult. However, this will give you a basis for using RAbD on your own.</p>
+<ol>
+<li><p>Sequence Design</p>
+<p>Using the application is as simple as setting the <code>-seq_design_cdrs</code> option. This simply designs the CDRs of the heavy chain using cdr profiles if they exist for those clusters during flexible-backbone design. If the clusters do not exist (as is the case for H3 at the moment), we use conservative design by default.</p>
+<pre><code>     antibody_designer.linuxgccrelease -s my_ab.pdb \
+         -seq_design_cdrs L1 L3 -light_chain kappa -nstruct 5 -out:prefix tutA1_
+
+
+     Main Mover: &lt;AntibodyDesignMover name=&quot;RAbD&quot; seq_design_cdrs=&quot;L1,L3&quot;&gt;
+</code></pre>
+<p>This will take a few minutes (227 seconds on my laptop). Ouptut structures and scores are in ../output_files if you wish to copy them over. Score the input pose using the InterfaceAnalayzer application</p>
+<pre><code>     InterfaceAnalyzer.linuxgccrelease -s my_ab.pdb -interface LH_ABCDEFGIJKZ -out:prefix native_
+</code></pre>
+<p>Take a look at our scorefile (located in ~/rosetta_workshop/rosetta/gmain/source/tools), sort according to the interface energy, dG separated, which is calculated by InterfaceAnalyzerMover. The score is calculated by scoring the complex, separating the antigen from the antibody, repacking side-chains at the interface, and then taking the difference is score - i.e. the dG.</p>
+<pre><code>     scorefile.py --scores dG_separated --output tab tutA1_score.sc | sort  -k2 -k1
+</code></pre>
+<p>Is it better than our input pose?</p>
+<pre><code>     scorefile.py --scores dG_separated --output tab tutA1_score.sc native_score.sc | sort -k2 -k1 
+</code></pre></li>
+<li><p>Graft Design</p>
+<p>Now we will be enabling graft design AND sequence design on L1 and L3 loops. With an nstruct of 5, we are doing 25 design trials total.</p>
+<pre><code>     antibody_designer.linuxgccrelease -s my_ab.pdb -graft_design_cdrs L1 L3 \
+         -seq_design_cdrs L1 L3 -light_chain kappa -nstruct 5 -out:prefix tutA2_ -overwrite
+
+
+     Main Mover: &lt;AntibodyDesignMover name=&quot;RAbD&quot; seq_design_cdrs=&quot;L1,L3&quot; graft_design_cdrs=&quot;L1,L3&quot;&gt;
+</code></pre>
+<p>This will take a about 2-3 times as long as sequence design, as grafting a non-breaking loop takes time. This was 738 seconds on my laptop. Ouptut structures and scores are in ../output_files if you wish to copy them over instead.</p>
+<p>Typically, we require a much higher -outer_cycle_rounds and nstruct to see anything significant. Did this improve energies?</p>
+<pre><code>     scorefile.py --scores dG_separated --summary tutA1_score.sc tutA2_score.sc
+     scorefile.py --scores dG_separated --output tab native_score.sc \
+         tutA1_score.sc tutA2_score.sc | sort -k2 -k1
+</code></pre>
+<p>Take a look at the lowest (dG) scoring pose in pymol - do you see any difference in L1 and L3 loops there? Do they make better contact than what we had before?</p>
+<p>Lets take a look in pymol.</p>
+<pre><code>     pymol my_ab.pdb tutA2_* 
+     @color_cdrs.pml
+     center full_epitope
+</code></pre>
+<p>How different are the L1 and L3 loops? Have any changed length?</p>
+<p>Open the PDB file of the lowest energy in a text editor. Go to the end of the file. Have the clusters changed from the native? To get the native cluster, open the PDB and look at the REMARK lines. THis was generated using the identify_cdr_clusters application.</p></li>
+<li><p>Basic De-novo run</p>
+<p>Here, we want to do a denovo-run (without docking), starting with random CDRs grafted in instead of whatever we have in the antibody to start with (only for the CDRs that are actually undergoing graft-design). This is useful, as we start the design with very high energy and work our way down. Note that since this is an entirely new interface for our model protein, this interface is already at a very high energy - and so this is less needed, but it should be noted how to do this. (139 seconds on my laptop)</p>
+<pre><code>    antibody_designer.linuxgccrelease -s my_ab.pdb -graft_design_cdrs L1 L3 \
+        -seq_design_cdrs L1 L3 -light_chain kappa -random_start -nstruct 1 -out:prefix tutA3_
+
+    Main Mover: &lt;AntibodyDesignMover name=&quot;RAbD&quot; graft_design_cdrs=&quot;L1,L3&quot; seq_design_cdrs=&quot;L1,L3&quot; 
+                                                                      random_start=&quot;1&quot;/&gt;
+</code></pre>
+<p>Would starting from a random CDR help anywhere? Perhaps if you want an entirely new cluster or length to break a patent or remove some off target effects? We will use it below to start de novo design with docking. Since the CDRs are native, these are already fairly energetically favorable.</p></li>
+<li><p>RosettaScripts RAbD Framework Components</p>
+<p>This tutorial will give you some exprience with your own XML antibody design protocol using the RosettaAntibdyDesign components. We will take the light chain CDRs from a malaria antibody and graft them into our antibody. In the tutorial we are interested in stabilizing the grafted CDRs in relation to the whole antibody, instead of interface design to an antigen.</p>
+<p>We will graft the CDRs in, minimize the structure with CDR dihedral constraints to not purturb the CDRs too much, and then design the framework around the CDRs while designing the CDRs and neighbors. The result should be mutations that better accomodate our new CDRs. This can be useful for humanizing potential antibodies or framework switching, where we want the binding properties of certain CDRs, but the stability or immunological profile of a different framework.</p>
+<ol>
+<li><p>Copy the Files</p>
+<pre><code> cp ../input_files/ab_design_components.xml .
+ cp ../input_files/malaria_cdrs.pdb .
+</code></pre>
+<p>Take a look at the xml. We are using the <em>AntibodyCDRGrafter</em> to do the grafting of our CDRs. We then add constraints using _CDRDihderalConstraintMover_s for each CDR. Next, we do a round of pack/min/pack using the <em>RestrictToCDRsAndNeighborsOperation</em> and the CDRResidueSelector. This task operation controls what we pack and design. It first limits packing and design to only the CDRs and its neighbors. By specifying the <em>design_framework=1</em> option we allow the neighbor framework residues to design, while the CDRs and antigen neighbors will only repack. If we wanted to disable antigen repacking, we would pass the <em>DisableAntibodyRegionOperation</em> task operation. Using this, we can specify any antibody region as <em>antibody_region</em>, <em>cdr_region</em>, or <em>antigen_region</em> and we can disable just design or both packing and design.</p>
+<p>These task operations allow us to chisel exactly what we want to design in antibody, sans a residue-specific resfile (though we could combine these with one of them!). These TaskOperations will eventually also become <em>ResidueSelectors</em>, to increase their utility further.</p>
+<p>Finally, we use the new SimpleMetric system to obtain our final sequence of the CDRs to compare to our native antibody as well as pymol selections of our CDRs.</p>
+<ul>
+<li><a href="https://www.rosettacommons.org/docs/latest/scripting_documentation/RosettaScripts/SimpleMetrics/SimpleMetrics">SimpleMetrics</a></li>
+</ul>
+<p>More Documentation is available here:</p>
+<ul>
+<li><a href="https://www.rosettacommons.org/docs/latest/scripting_documentation/RosettaScripts/RosettaScripts">RosettaScripts</a></li>
+<li><a href="https://www.rosettacommons.org/docs/latest/scripting_documentation/RosettaScripts/TaskOperations/TaskOperations-RosettaScripts#antibody-and-cdr-specific-operations">Antibody and CDR specific operations</a></li>
+<li><a href="https://www.rosettacommons.org/docs/latest/scripting_documentation/RosettaScripts/Movers/Movers-RosettaScripts#antibody-modeling-and-design-movers">Antibody modelling and design movers</a></li>
+</ul></li>
+<li><p>Run the protocol or copy the output (357 seconds).</p>
+<pre><code> rosetta_scripts.linuxgccrelease -parser:protocol ab_design_components.xml \
+     -input_ab_scheme AHO_Scheme -cdr_definition North \
+     -s my_ab.pdb -out:prefix tutA4_ \
+     -nstruct 5 -score:weights ref2015_cart -check_cdr_chainbreaks false
+</code></pre></li>
+<li><p>Look at the score file. Are the sequences different between what we started with? How about the interaction energies?</p></li>
+</ol></li>
+</ol>
+<h2 id="tutorial-b-optimizing-interface-energy-opt-dg">Tutorial B: Optimizing Interface Energy (opt-dG)</h2>
+<ol>
+<li><p>Optimizing dG</p>
+<p>Here, we want to set the protocol to optimize the interface energy during Monte Carlo instead of total energy. The interface energy is calculated by the InterfaceAnalyzerMover through a specialized MonteCarlo called <em>MonteCarloInterface</em>. This is useful to improve binding energy and generally results in better interface energies . Resulting models should still be pruned for high total energy. This was benchmarked in the paper, and has been used for real-life designs to the HIV epitope (825 seconds).</p>
+<pre><code>     antibody_designer.linuxgccrelease -s my_ab.pdb -graft_design_cdrs L1 L3 \
+         -seq_design_cdrs L1 L3 -light_chain kappa -mc_optimize_dG  -nstruct 5 \
+         -out:prefix tutB1_
+
+     Main Mover: &lt;AntibodyDesignMover name=&quot;RAbD&quot; seq_design_cdrs=&quot;L1,L3&quot; graft_design_cdrs=&quot;L1,L3&quot; 
+                                                                     mc_optimize_dG=&quot;1&quot; /&gt;
+</code></pre>
+<p>Use the scorefile.py script to compare this to tutorial A2. Are the interface energies better? Has the Shape Complementarity improved (sc score) improved?</p></li>
+<li><p>Optimizing Interface Energy and Total Score (opt-dG and opt-E)</p>
+<p>Here, we want to set the protocol to optimize the interface energy during Monte Carlo, but we want to add some total energy to the weight. Because the overall numbers of total energy will dominate the overall numbers, we only add a small weight for total energy. This has not been fully benchmarked, but if your models have very bad total energy when using opt-dG - consider using it. (892)</p>
+<pre><code> antibody_designer.linuxgccrelease -s my_ab.pdb  -graft_design_cdrs L1 L3 \
+     -seq_design_cdrs L1 L3 -light_chain kappa -mc_optimize_dG \
+     -mc_total_weight .01 -mc_interface_weight .99 -nstruct 5 -out:prefix tutB2_
+</code></pre>
+<p>Use the scorefile.py script to compare total energies (<code>total_score</code>) of this run vs the one right before it. Are the total scores better?</p></li>
+</ol>
+<h2 id="tutorial-c-towards-denovo-design-integrated-dockdesign">Tutorial C: Towards DeNovo Design: Integrated Dock/Design</h2>
+<p>This tutorial takes a long time to run as docking is fairly slow - even with the optimizations that are part of RAbD. PLEASE USE THE PREGENERATED OUTPUT. The top 10 designs from each tutorial and associated scorefiles of a 1000 nstruct cluster run are in the output directory. Note that we are starting these tutorials with a pre-relaxed structure in order to get more reliable rosetta energies. Since we are running a large nstruct, we will escape the local energy well that this leads us into.</p>
+<ol>
+<li><p>RosettaDocking</p>
+<p>In this example, we use integrated RosettaDock (with sequence design during the high-res step) to sample the antibody-antigen orientation, but we don't care where the antibody binds to the antigen. Just that it binds. IE - No Constraints. The RAbD protocol always has at least Paratope SiteConstraints enabled to make sure any docking is contained to the paratope (like most good docking programs). This takes too long to run, so PLEASE USE THE OUTPUT GENERATED FOR YOU. We will use opt-dG here and for these tutorials, we will be sequence-designing all cdrs to begin to create a better interface. Note that sequence design happens whereever packing occurs - Including during high-resolution docking.</p>
+<pre><code>     antibody_designer.linuxgccrelease -s my_ab_relaxed.pdb -graft_design_cdrs L1 L2 L3 H1 H2 \
+         -seq_design_cdrs L1 L2 L3 H1 H2 H3 -light_chain kappa \
+         -mc_optimize_dG -do_dock -nstruct 1000 -random_start -out:prefix tutC1_
+
+     Main Mover: &lt;AntibodyDesignMover name=&quot;RAbD&quot; mc_optimize_dG=&quot;1&quot; do_dock=&quot;1&quot; 
+                    seq_design_cdrs=&quot;L1,L2,L3,H1,H2,H3&quot; graft_design_cdrs=&quot;L1,L2,L3,H1,H2&quot;/&gt;
+</code></pre>
+<p>Use pymol to load the files</p>
+<pre><code>     cp -r ../output_files/top10_C1/ .
+     cp ../output_files/tutC1_score.sc .
+     pymol my_ab.pdb top10_C1/* 
+     @color_cdrs.pml
+     center full_epitope
+</code></pre>
+<p>Where is the antibody in the resulting designs? Are the interfaces restricted to the Paratope? Has the epitope moved relative to the starting interface?</p></li>
+<li><p>Auto Epitope Constraints</p>
+<p>Allow Dock-Design, incorporating auto-generated SiteConstraints to keep the antibody around the starting interface residues. These residues are determined by being within 6A to the CDR residues (This interface distance can be customized). Again, these results are provided for you.</p>
+<pre><code>     antibody_designer.linuxgccrelease -s my_ab_relaxed.pdb -graft_design_cdrs L1 L3 \
+         -seq_design_cdrs L1 L2 L3 H1 H2 H3 -light_chain kappa \
+         -mc_optimize_dG -do_dock -use_epitope_constraints -nstruct 1000 -out:prefix tutC2_
+
+     Main Mover: &lt;AntibodyDesignMover name=&quot;RAbD&quot; mc_optimize_dG=&quot;1&quot; do_dock=&quot;1&quot; use_epitope_csts=&quot;1&quot; 
+                    seq_design_cdrs=&quot;L1,L2,L3,H1,H2,H3&quot; graft_design_cdrs=&quot;L1,L2,L3,H1,H2&quot;/&gt;
+</code></pre>
+<p>Use pymol to load the files</p>
+<pre><code>     cp -r ../output_files/top10_C2/ .
+     cp ../output_files/tutC2_score.sc .
+     pymol my_ab.pdb top10_C2/* 
+     @color_cdrs.pml
+     center full_epitope
+</code></pre>
+<p>How do these compare with with the previous tutorial? Are the antibodies closer to the starting interface? Are the scores better?</p></li>
+<li><p>Specific Residue Epitope Constraints</p>
+<p>Allow Dock-Design, as above, but specify the Epitope Residues and Paratope CDRs to guide the dock/design to have these interact. For now, we are more focused on the light chain. We could do this as a two-stage process, where we first optimize positioning and CDRS of the light chain and then the heavy chain or simply add heavy chain CDRs to the paratope CDRs option.</p>
+<pre><code>     antibody_designer.linuxgccrelease -s my_ab_relaxed.pdb -graft_design_cdrs L1 L3 \
+         -seq_design_cdrs L1 L2 L3 H1 H2 H3 -light_chain kappa -do_dock -use_epitope_constraints \
+         -paratope L1 L3 -epitope 38J 52J 34K 37K -nstruct 1000 -out:prefix tutC3_
+
+     Main Mover: &lt;AntibodyDesignMover name=&quot;RAbD&quot; mc_optimize_dG=&quot;1&quot; do_dock=&quot;1&quot; use_epitope_csts=&quot;1&quot; 
+                    epitope_residues=&quot;38J,52J,34K,37K&quot; paratope_cdrs=&quot;L1,L3&quot; 
+                    seq_design_cdrs=&quot;L1,L2,L3,H1,H2,H3&quot; graft_design_cdrs=&quot;L1,L2,L3,H1,H2&quot;/&gt;
+</code></pre>
+<p>Again, load these into Pymol.</p>
+<pre><code>     cp -r ../output_files/top10_C3 .
+     cp ../output_files/tutC1_score.sc .
+     pymol my_ab.pdb top10_C3/* 
+     @color_cdrs.pml
+     center full_epitope
+</code></pre>
+<p>Now that we have specified where we want the interface to be and are additionally designing more CDRS, how do the enegies compare? Are we starting to get a decent interface with the lowest energy structure?</p>
+<p>How do these compare with the previous runs?</p></li>
+</ol>
+<h2 id="tutorial-d-advanced-settings-and-cdr-instruction-file-customization">Tutorial D: Advanced Settings and CDR Instruction File Customization</h2>
+<p>Once again, all output files are in ../output_files. Please use these if you want as many of these take around 10 minutes to run.</p>
+<ol>
+<li><p>CDR Instruction File</p>
+<p>More complicated design runs can be created by using the Antibody Design Instruction file. This file allows complete customization of the design run. See below for a review of the syntax of the file and possible customization. An instruction file is provided where we use conservative design on L1 and graft in L1, H2, and H1 CDRs at a longer length to attempt to create a larger interface area. More info on instruction file syntax can be found at the end of this tutorial. (764 seconds on my laptop)</p>
+<pre><code>    cp ../input_files/my_instruction_file.txt .
+    cp ../input_files/default_cdr_instructions.txt .
+</code></pre>
+<p>Take a look at the default CDR instructions. These are loaded by default into Rosetta. There is syntax examples at the end of the file.</p>
+<pre><code>    antibody_designer.linuxgccrelease -s my_ab.pdb \
+        -graft_design_cdrs L1 H2 H1 -seq_design_cdrs L1 L3 H1 H2 H3 -light_chain kappa \
+        -cdr_instructions my_instruction_file.txt -random_start -nstruct 5 -out:prefix tutD1_
+
+    Main Mover: &lt;AntibodyDesignMover name=&quot;RAbD&quot; instruction_file=&quot;my_instruction_file.txt&quot; 
+             seq_design_cdrs=&quot;L1,L3,H1,H2,H3&quot; graft_design_cdrs=&quot;L1,H2,H1&quot; random_start=&quot;1&quot;
+</code></pre></li>
+<li><p>Dissallow AAs and the Resfile</p>
+<p>Here, we will disallow ANY sequence design into Proline residues and Cysteine residues, while giving a resfile to further LIMIT design and packing as specific positions. These can be given as 3 or 1 letter codes and mixed codes such as PRO and C are accepted. Note that the resfile does NOT turn any residues ON, it is simply used to optionally LIMIT design residue types and design and packing positions. Resfile syntax can be found here: <a href="https://www.rosettacommons.org/docs/wiki/rosetta_basics/file_types/resfiles">Resfiles</a> Note that specifying a resfile and dissalowing aa are only currently available as cmd-line options that are read by RAbD.</p>
+<p>Runtime is approximately 200 seconds.</p>
+<pre><code>    cp ../input_files/my_resfile.resfile .
+</code></pre>
+<p>Take a look at the resfile. Can you describe what it is we are doing with it?</p>
+<pre><code>    antibody_designer.linuxgccrelease -s my_ab.pdb -seq_design_cdrs L1 L3 H1 H2 H3 \
+        -light_chain kappa -resfile my_resfile.resfile -disallow_aa PRO CYS \
+        -nstruct 5 -out:prefix tutD2_
+
+    Main Mover: &lt;AntibodyDesignMover name=&quot;RAbD&quot; seq_design_cdrs=&quot;L1,L3,H1,H2,H3&quot; /&gt;
+</code></pre></li>
+<li><p>Mintype</p>
+<p>Here, we will change the mintype to relax. This mintype enables Flexible-Backbone design. Our default is to use min/pack cycles, but relax typically works better. However, it also takes considerably more time! This tutorial takes about 339 seconds for one struct!</p>
+<pre><code>     antibody_designer.linuxgccrelease -s my_ab.pdb -seq_design_cdrs L1 L3 H1 H3 \ 
+         -light_chain kappa -resfile my_resfile.resfile -disallow_aa PRO CYS -mintype relax \
+         -nstruct 1 -out:prefix tutD3_
+
+     Main Mover: &lt;AntibodyDesignMover name=&quot;RAbD&quot; seq_design_cdrs=&quot;L1,L3,H1,H3&quot; mintype=&quot;relax&quot;/&gt;
+</code></pre></li>
+<li><p>Framework Design</p>
+<p>Finally, we want to allow the framework residues AROUND the CDRs we will be designing and any interacting antigen residues to design as well here. In addition, we will disable conservative framework design as we want something funky (this is not typically recommended and is used here to indicate what you CAN do. Note that we will also design the interface of the antigen using the <code>-design_antigen</code> option. This can be useful for vaccine design. Note that these design options are cmd-line ony options currently. Approx 900 second runtime.</p>
+<pre><code>     antibody_designer.linuxgccrelease -s my_ab.pdb -seq_design_cdrs L1 L3 H1 H3 \
+         -light_chain kappa -resfile my_resfile.resfile -disallow_aa PRO CYS \
+         -mintype relax -design_antigen -design_framework \
+         -conservative_framework_design false -nstruct 1 -out:prefix tutD4_
+
+     Main Mover: &lt;AntibodyDesignMover name=&quot;RAbD&quot; seq_design_cdrs=&quot;L1,L3,H1,H3&quot; mintype=&quot;relax&quot;/&gt;
+</code></pre></li>
+<li><p>H3 Stem, kT, and Sequence variablility.</p>
+<p>Finally, we want increased variability for our sequence designs. So, we will increase number of sampling rounds for our lovely cluster profiles using the <code>-seq_design_profile_samples</code> option, increase kT, and allow H3 stem design.</p>
+<p>We will enable H3 Stem design here, which can cause a flipping of the H3 stem type from bulged to non-bulged and vice-versa. Typically, if you do this, you may want to run loop modeling on the top designs to confirm the H3 structure remains in-tact. Note that once again, these sequence-design specific options must be set on the cmd-line.</p>
+<p>Description of the <code>seq_design_profile_samples</code> option (default 1): "If designing using profiles, this is the number of times the profile is sampled each time packing done. Increase this number to increase variability of designs - especially if not using relax as the mintype."</p>
+<p>This tutorial takes approx 450 seconds.</p>
+<pre><code>    antibody_designer.linuxgccrelease -s my_ab.pdb -seq_design_cdrs L1 L2 H3 \
+        -graft_design_cdrs L1 L2 -light_chain kappa -design_H3_stem -inner_kt 2.0 \
+        -outer_kt 2.0 -seq_design_profile_samples 5 -nstruct 5 -out:prefix tutD5_
+
+    Main Mover: &lt;AntibodyDesignMover name=&quot;RAbD&quot; seq_design_cdrs=&quot;L1,L3,H1,H3&quot; mintype=&quot;relax&quot; 
+                                                            inner_kt=&quot;2.0&quot; outer_kt=&quot;2.0&quot;/&gt;
+</code></pre>
+<p>How different is the sequence of L1,L2, and H3 from our starting antibody?</p></li>
+</ol>
+<p><strong>You should now be ready to explore and use RosettaAntibodyDesign on your own. Congrats! Thanks for going through this tutorial!</strong></p>
+<h1 id="reference-manual">Reference Manual</h1>
+<h2 id="antibody-design-cdr-instruction-file">Antibody Design CDR Instruction File</h2>
+<p>The Antibody Design Instruction File handles CDR-level control of the algorithm and design. It is used to create the CDRSet for sampling whole CDRs from the PDB, as well as fine-tuning the minimization steps and sequence design strategies.</p>
+<p>For example, in a redesign project, we may only want to design a particular CDR and explore the local conformations within its starting CDR cluster, or we may simply want to optimize the sequence of a CDR or set of CDRs using our cluster profiles. These examples can be accomplished using the CDR Instruction File. This file uses a simple syntax where each CDR is controlled individually in the first column, and then a rudimentary language controls each part of the antibody design machinery. The file controls which CDRs are sampled, what the final CDRSet will be, whether sequence design is performed and how, and which minimization type will be used to optimize the structure and sequence for each CDR. Some of these commands can also be controlled via command-line options for simple-to-setup runs. Any option set via command-line (such as <code>-graft_design_cdrs</code> and <code>-seq_design_cdrs</code> will override anything set in the instruction file)</p>
+<h3 id="syntax">Syntax</h3>
+<p>The CDR Instruction file is composed of tab or white-space delimited columns. The first column on each line specifies which CDR the option is for. For each option, 'ALL' can be given to control all of the CDRs at once. ALL can also be used in succession to first set all CDRs to something and then one or more CDRs can be set to something else in succeeding lines. Commands are not lower- or upper-case-sensitive. A '#' character at the beginning of a line is a file comment and is skipped.</p>
+<p><strong>First column</strong> - <em>CDR</em></p>
+<p><strong>Second Column</strong> - <em>TYPE</em></p>
+<p>Other columns can be used to specify lists, etc.</p>
+<p><strong>Instruction Types</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>GraftDesign</td>
+<td>Instructions for the Graft-based Design stage</td>
+</tr>
+<tr class="even">
+<td>SeqDesign</td>
+<td>Instructions for Sequence Design</td>
+</tr>
+<tr class="odd">
+<td>CDRSet</td>
+<td>Instructions for which structures end up in the set of structures</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>from which to sample during GraftDesign. option follows the syntax:</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td><code>CDR CDRSet option</code></td>
+</tr>
+<tr class="even">
+<td>MinProtocol</td>
+<td>Instructions for Minimization</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example</strong></p>
+<pre><code>#H3 no design; just flexible motion of the loop
+
+#SET All to design first
+ALL GraftDesign ALLOW
+ALL SeqDesign ALLOW
+
+#Fix H3 and disallow GraftDesign for H1 and L2
+L2 GraftDesign FIX
+H1 GraftDesign FIX
+
+#Disallow GraftDesign and SeqDesign for H3
+H3 FIX
+
+ALL MinProtocol MINTYPE relax
+
+ALL CDRSet EXCLUDE PDBIDs 1N8Z 3BEI
+
+#ALL CDRSet EXCLUDE Clusters L1-11-1 L3-9-cis7-1 H2-10-1
+</code></pre>
+<hr />
+<p><strong>General Design Syntax</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th>Instruction</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>L1 Allow</code></td>
+<td>Allow L1 to Design in both modes</td>
+</tr>
+<tr class="even">
+<td><code>L1 GraftDesign Allow</code></td>
+<td>Allow L1 to GraftDesign</td>
+</tr>
+<tr class="odd">
+<td><code>L1 SeqDesign Allow</code></td>
+<td>Allow L1 to SequenceDesign</td>
+</tr>
+<tr class="even">
+<td><code>L1 Fix</code></td>
+<td>Disable L1 to Design in both modes</td>
+</tr>
+<tr class="odd">
+<td><code>L1 GraftDesign Fix</code></td>
+<td>Disable L1 to GraftDesign</td>
+</tr>
+<tr class="even">
+<td><code>L1 SeqDesign Fix</code></td>
+<td>Disable L1 to SequenceDesign</td>
+</tr>
+<tr class="odd">
+<td><code>L1 Weights Z</code></td>
+<td>Weight a particular CDR when choosing which CDR to design.</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>By default, all CDRs have an equal weight.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p><strong>CDRSet Syntax (General)</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th>Instruction</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>L1 CDRSet Length Max X</code></td>
+<td>Maximum length of CDR</td>
+</tr>
+<tr class="even">
+<td><code>L1 CDRSet Length Min Y</code></td>
+<td>Minimum length of CDR</td>
+</tr>
+<tr class="odd">
+<td><code>L1 CDRSet Cluster_Cutoffs Z</code></td>
+<td>Limits the CDRSet to include only CDRs of clusters that have Z or more members.</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>Used in conjunction with Sequence Design cutoffs to sample clusters where</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>profile data is sufficient or simply common clusters of a particular species.</td>
+</tr>
+<tr class="even">
+<td><code>L1 CDRSet ONLY_CURRENT_CLUSTER</code></td>
+<td>Limits the CDRSet to include only CDRs belonging to the identified cluster of the</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>starting CDR. Overrides other options. Used for sequence and structure sampling</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>within CDR clusters. Useful for redesign applications.</td>
+</tr>
+<tr class="odd">
+<td><code>L1 CDRSet Center_Clusters_Only</code></td>
+<td>Limits the CDRSet to include only CDRs that are cluster centers. Overrides other</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>options. Used for broadly sampling CDR structure space. Useful to get an idea of</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>what CDRs can fit well or for a first-pass run for de novo design.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>CDRSet Syntax (Include and Excludes)</strong></p>
+<p>This set of options either includes only the items specified or it excludes specific items. The syntax is thus:</p>
+<p><code>L1 CDRSet INCLUDE_ONLY option list of items</code></p>
+<p>OR</p>
+<p><code>L1 CDRSet EXCLUDE option list of items</code></p>
+<p>The options for this type of CDRSet syntax are listed below</p>
+<table>
+<thead>
+<tr class="header">
+<th>Option</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>PDBIDs</code></td>
+<td>Include only or leave out a specific set of PDBIds. This is very useful for benchmarking purposes.</td>
+</tr>
+<tr class="even">
+<td><code>Clusters</code></td>
+<td>Include only or leave out a specific set of Clusters. Useful if the user already knows which clusters are</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>able to interact with antigen, whether this is from previous runs of the program or via homologues.</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>This is also useful for benchmarking.</td>
+</tr>
+<tr class="odd">
+<td><code>Germline</code></td>
+<td>Include only or leave out specific human/mouse germlines.</td>
+</tr>
+<tr class="even">
+<td><code>Species</code></td>
+<td>Include only or leave out specific species. Very useful limiting possible immune reactions in the final designs.</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>2 Letter designation as used by IMGT. Hu and Mo for Human and Mouse.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p><strong>Sequence Design Instructions</strong></p>
+<p>The Sequence Design Instructions, used with the keyword SeqDesign after the CDR specifier, is used to control the sequence design aspect of the algorithm. In addition to controlling which CDRs undergo sequence design, the Sequence Design options control which strategy to use when doing sequence design (primary strategy), and which strategy to use if the primary strategy cannot be used for that CDR (fallback strategy).</p>
+<p>Currently, the fallback strategy is used if the primary strategy does not meet statistical requirements. For example, using cluster-based profiles for sequence design (which is the default), it is imperative that the particular cluster has at least some number of sequences in the database for the strategy to be successful. By default, this cutoff is set at 10 and uses the command-line option, <code>-seq_design_stats_cutoff Z</code>. This means that if a cluster has less than 10 members and the primary strategy is to use cluster-based profiles, then the fallback strategy will be used. The default fallback strategy for all of the CDRs is the use of a set of conservative mutations with data coming from the BLOSUM62 matrix by default, with the set of mutations allowed consisting of those substitutions with positive or zero scores in the matrix. For example, if we have a D at some position for which we are using this fallback strategy, the set of allowed mutants would be N, Q, E, and S. Further, the set of conservative mutations can be controlled using the command-line option, <code>-cons_design_data_source</code> source, where other BLOSUM matrices can be specified. All BLOSUM matrices can be used for conservative design, where the numbers (40 vs. 62 vs. 80 etc.) indicate the sequence similarity cutoffs used to derive the BLOSUM matrices - with higher numbers being a more conservative set of mutations.</p>
+<p><strong>General Syntax</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th>Option</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>L1 SeqDesign Strategy Z</code></td>
+<td>Set Primary Sequence Design Strategy</td>
+</tr>
+<tr class="even">
+<td><code>L1 SeqDesign Fallback_Strategy Z</code></td>
+<td>Set Fallback Sequence Design Strategy</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Strategy Types</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th>Z</th>
+<th>Strategy Use</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>Profiles</code></td>
+<td>Primary</td>
+<td>Use cluster-based profiles based on sequence probabilities as described above</td>
+</tr>
+<tr class="even">
+<td><code>Profile_Sets</code></td>
+<td>Primary</td>
+<td>Randomly sample a full CDR sequence from the CDR cluster</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td></td>
+<td>each time packing is done</td>
+</tr>
+<tr class="even">
+<td><code>Profiles_Combined</code></td>
+<td>Primary</td>
+<td>Randomly sample a full CDR sequence from the CDR cluster and</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td></td>
+<td>sample from the cluster-based profiles each time packing is done.</td>
+</tr>
+<tr class="even">
+<td></td>
+<td></td>
+<td>Used to increase variability.</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td></td>
+<td>Helpful in conjunction with center cluster member CDRSet sampling.</td>
+</tr>
+<tr class="even">
+<td><code>Conservative</code></td>
+<td>Both</td>
+<td>Conservative design operation as described above</td>
+</tr>
+<tr class="odd">
+<td><code>Basic</code></td>
+<td>Both</td>
+<td>Basic design - no profiles, just enabling all amino acids at those positions</td>
+</tr>
+<tr class="even">
+<td><code>Disable</code></td>
+<td>Fallback</td>
+<td>Turn off design for that CDR if primary strategy does not meet cutoffs.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Etc</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th>Option</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>L1 SeqDesign DISALLOWED</code></td>
+<td>Disable specific amino acid sampling for this CDR</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>(One or Three letter codes. Can be mixed) Ex. ARG C S ASN PRO</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p><strong>Minimization</strong></p>
+<p>Many minimization types are implemented; however, they each require a different amount of time to run. See the MinType descriptions below for a list of acceptable options and their use.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Option</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>L1 MinProtocol MinType Z</code></td>
+<td>Set the minimization type for this CDR</td>
+</tr>
+<tr class="even">
+<td><code>L1 MinProtocol MinOther CDRX, CDRY, CDRZ</code></td>
+<td>Set other CDRs to minimize during the optimization/design of this</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>particular CDR. A packing shell around the CDRs to be minimized</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>within a set distance (default 6 Å) is created. Any CDRs or regions</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>(framework/antigen) set to design within this shell will be designed.</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>These regions will use all set sequence design options (profiles,</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>conservative, etc.). This option is useful for creating CDR-CDR</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>interactions for loop and antibody structural stability.</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>By default, we reasonably minimize other CDRs during the</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>optimization step. (More CDRs = Lower Speed)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="default-settings">Default Settings</h2>
+<p>These settings are overridden by your set instruction file/command-line options</p>
+<pre><code>
+#General
+ALL FIX
+DE FIX
+
+ALL WEIGHTS 1.0
+
+#Minimization - Options: min, relax, ds_relax cartesian, backrub, repack, none
+ALL MinProtocol MINTYPE min
+
+#Neighbors.  These are conservative values used in benchmarking.  Limit these to speed up runs.
+L1 MinProtocol Min_Neighbors L2 L3
+L2 MinProtocol Min_Neighbors L1
+L3 MinProtocol Min_Neighbors L1 H3
+H1 MinProtocol Min_Neighbors H2 H3
+H2 MinProtocol Min_Neighbors H1
+H3 MinProtocol Min_Neighbors L1 L3
+
+#Length
+ALL CDRSet LENGTH MAX 25
+ALL CDRSet LENGTH MIN 1
+
+
+#Profile Design
+ALL SeqDesign STRATEGY PROFILES
+ALL SeqDesign FALLBACK_STRATEGY CONSERVATIVE
+
+##DE Loops can be designed.  They use conservative design by default since we have no profile data!
+DE SeqDesign STRATEGY CONSERVATIVE
+</code></pre>
+<h2 id="graftdesign-sampling-algorithms">GraftDesign Sampling Algorithms</h2>
+<p>These change the way CDRs are sampled from the antibody design database. They can be specified using the <code>-design_protocol</code> flag.</p>
+<table>
+<thead>
+<tr class="header">
+<th><code>-design_protocol</code></th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>even_cluster_mc</code></td>
+<td>Evenly sample clusters during the GraftDesign stage by first choosing a cluster</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>from all the clusters set to design for the chosen Primary CDR</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>and then choosing a structure within that cluster. (<strong>DEFAULT</strong>)</td>
+</tr>
+<tr class="even">
+<td><code>even_length_cluster_mc</code></td>
+<td>Evenly sample lengths and clusters during the GraftDesign stage by first choosing a</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>length from the set of lengths for the chosen Primary CDR and the a cluster from</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>the set of clusters, and then finally a structure within that cluster.</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>Useful to broaden set of lengths sampled during the protocol.</td>
+</tr>
+<tr class="even">
+<td><code>gen_mc</code></td>
+<td>Sample CDRs to GraftDesign according to their distribution in the database.</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>This results in common clusters and lengths being sampled more frequently.</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>However, these lengths/clusters may not be those regularly seen in nature vs</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>regularly crystalized. AKA - they are biased towards crystals, however,</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>they have more profile data associated with them.</td>
+</tr>
+<tr class="odd">
+<td><code>deterministic_graft</code></td>
+<td>Deterministic Graft is meant to try every CDR combination from the CDRSet (the set</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>of clusters and structures). The outer loop is done deterministically for each CDR</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>in a set. It is very useful for trying small numbers of combinations - such as all</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>loop lengths &gt;=12 for H2 or all CDRs of a particular cluster. Note that there is</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>no outer monte carlo, so the final designs are the best found by the protocol,</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>and each sampling is independent from the others. If you have too many structures</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>in your CDRSet (such as all L1) and you try combos that are beyond a certain limit</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>(AKA - they will never finish), you will error out. Once a Multi-Threaded Rosetta</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>is working, trying all possibilities is certainly something that is more plausible.</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>If you are interested in using something like this, please email the author.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="structure-optimization-types">Structure Optimization Types</h2>
+<p>These 'Mintypes' can be independently set for each CDR through the instruction file or generally set using the command line option <code>-mintype</code>. The default is <code>min</code>, as this has some optimization and does not take a very long time (and has been shown to be comparable to relax). Although we refer to 'design' we mean side-chain packing, with any residues/CDRs set to design as designing. For further information on the algorithm and strategies used for sequence design, please see the instruction file overview and the methods section of the paper.</p>
+<p>Circular Harmonic Dihedral Constraints are added to each CDR according the cluster of the CDR or the starting dihedrals if this is a rare cluster that has no data. These ensure that minimization and design does not destroy the loop.</p>
+<table>
+<thead>
+<tr class="header">
+<th><code>-mintype</code></th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>min</code></td>
+<td><strong>Cycle of design-&gt;min-&gt;design-&gt;min</strong>. Results in good structures, however not as good as relax</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>in recovering native physical characteristics. Significantly faster. (<strong>DEFAULT</strong>)</td>
+</tr>
+<tr class="odd">
+<td><code>cartmin</code></td>
+<td><strong>Cycle of design-&gt;min-&gt;design-&gt;min</strong> Cartesian Space Minimization.</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>Automatically adds cart_bonded term if not present and turns off pro_close</td>
+</tr>
+<tr class="odd">
+<td><code>relax</code></td>
+<td>Flexible Backbone design using <code>RelaxedDesign</code>, which is neighbor-aware design during FastRelax</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>where the packing shell to the designing CDRs is updated at every packing iteration.</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>Results in lower energies and closer physical characteristics to native, but takes significantly longer.</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>It is recommended to first run min and then relax mintype on the top resulting models.</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td><a href="https://www.ncbi.nlm.nih.gov/pubmed/21073878">(Relax Protocol Paper)</a></td>
+</tr>
+<tr class="even">
+<td><code>dualspace_relax</code></td>
+<td>Flexible Backbone design using 'RelaxedDesign' while optimizing both Dihedral and Cartesian space</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td><a href="https://www.ncbi.nlm.nih.gov/pubmed/24265211">Dualspace Relax Protocol Paper</a></td>
+</tr>
+<tr class="even">
+<td><code>backrub</code></td>
+<td><strong>Cycle of backrub-&gt;design</strong>. Uses backrub to optimize the Backbone of the CDRs set to minimize.</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>Use the <code>-add_backrub_pivots 11A 12A 12A:B </code> option to add additional sets of back rub pivots,</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>such as to add flexibility to the antigen interface. Flexibility is extremely minimal,</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>but in some cases may be useful. <a href="http://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1000393">(Original Backrub Protocol Paper)</a></td>
+</tr>
+</tbody>
+</table>
+<h2 id="rosettascripts-and-pyrosetta">RosettaScripts and PyRosetta</h2>
+<p>The Full protocol that is the application is available to RosettaScripts as the AntibodyDesignProtocol. This just has a few extra options before and after design such as running fast relax and or snug dock.</p>
+<p>The Configurable main Mover is available as the AntibodyDesignMover.</p>
+<p>Individual components of RAbD can be used to create your own custom antibody modeling and design protocols in RosettaScripts (or PyRosetta).</p>
+<h2 id="command-line-options">Command-line Options</h2>
+<p><strong>General Options</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th>Option</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>-view</code></td>
+<td>Enable viewing of the antibody design run. Must have built using extras=graphics and</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>run with antibody_designer.graphics executable (<strong>Default=False</strong>)</td>
+</tr>
+<tr class="odd">
+<td><code>-cdr_instructions</code></td>
+<td>Path to CDR Instruction File</td>
+</tr>
+<tr class="even">
+<td><code>-antibody_database</code></td>
+<td>Path to the current Antibody Database, updated weekly.</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>Download from <a href="http://dunbrack2.fccc.edu/PyIgClassify/">http://dunbrack2.fccc.edu/PyIgClassify/</a></td>
+</tr>
+<tr class="even">
+<td></td>
+<td>(<strong>Default=/sampling/antibodies/antibody_database_rosetta_design.db</strong>)</td>
+</tr>
+<tr class="odd">
+<td><code>-paper_ab_db</code></td>
+<td>Force the use the Antibody Database with data from the North clustering paper.</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>This is included in Rosetta. If a newer antibody database is not found, we will use this.</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>The full ab db is available at <a href="http://dunbrack2.fccc.edu/PyIgClassify/">Through PyIgClassify</a> (<strong>Default = false</strong>)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p><strong>Basic settings for an easy-to-setup run</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th>Option</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>-seq_design_cdrs</code></td>
+<td>Enable these CDRs for Sequence-Design. (Can be set here or in the instructions file.</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>Overrides any set in instructions file if given ) Ex -seq_design_cdrs L1 L2 L3 h1</td>
+</tr>
+<tr class="odd">
+<td><code>-graft_design_cdrs</code></td>
+<td>Enable these CDRs for Graft-Design. (Can be set here or in the instructions file.</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>Overrides any set in instructions file if given) Ex -graft_design_cdrs L1 L2 L3 h1</td>
+</tr>
+<tr class="odd">
+<td><code>-primary_cdrs</code></td>
+<td>Manually set the CDRs which can be chosen in the outer cycle.</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>Normally, we pick any that are sequence-designing.</td>
+</tr>
+<tr class="odd">
+<td><code>-mintype</code></td>
+<td>The default mintype for all CDRs. Individual CDRs may be set via the instructions file</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>(<em>Options = min, cartmin, relax, backrub, pack, dualspace_relax, cen_relax, none</em>) (<strong>Default=min</strong>)</td>
+</tr>
+<tr class="odd">
+<td><code>-disallow_aa</code></td>
+<td>Disallow certain amino acids while sequence-designing (could still be in the graft-designed sequence).</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>Useful for optimizing without, for example, cysteines and prolines. Applies to all sequence design</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>profiles and residues from any region (cdrs, framework, antigen). You can control this per-cdr</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>(or only for the CDRs) through the CDR-instruction file. A resfile is also accepted if you wish</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>to limit specific positions directly. (Three or One letter codes)</td>
+</tr>
+<tr class="even">
+<td><code>-top_designs</code></td>
+<td>Number of top designs to keep (ensemble). These will be written to a PDB and each move</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>onto the next step in the protocol. (<strong>Default=1</strong>)</td>
+</tr>
+<tr class="even">
+<td><code>-do_dock</code></td>
+<td>Run a short lowres + highres docking step in the inner cycles. (dock/min).</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>Recommended 2 inner cycles for better coverage. (dock/min/dock/min).</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>Inner/Outer loops for highres are hard coded, while low-res can be changed through</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>regular low_res options. If sequence design is enabled, will design regions/CDRs</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>set during the high-res dock (<strong>Default=false</strong>)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p><strong>Energy Optimization settings (opt-dG)</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th>Option</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>-mc_optimize_dG</code></td>
+<td>Optimize the dG during MonteCarlo. It is not possible to do this within overall scoring,</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>but where possible, do this during MC calls. This option does not globally-use the</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>MonteCarloInterface object, but is protocol-specific. This is due to needing to know the</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>interface it will be used on. dG is measured by the InterfaceAnalyzerMover. (<strong>Default=false</strong>)</td>
+</tr>
+<tr class="odd">
+<td><code>-mc_interface_weight</code></td>
+<td>Weight of interface score if using MonteCarloInterface with a particular protocol. (<strong>Default=1.0</strong>)</td>
+</tr>
+<tr class="even">
+<td><code>-mc_total_weight</code></td>
+<td>Weight of total score if using MonteCarloInterface with a particular protocol. (<strong>Default=0.0</strong>)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p><strong>Protocol Rounds</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th>Option</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>-outer_cycle_rounds</code></td>
+<td>Rounds for outer loop of the protocol (not for deterministic_graft ). Each round chooses</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>a CDR and designs. One run of 100 cycles with relax takes about 12 hours. If you decrease</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>this number, you will decrease your run time significantly, but your final decoys will be</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>higher energy. Make sure to increase the total number of output structures (nstruct) if</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>you use lower than this number. Typically about 500 - 1000 nstruct is more than sufficient.</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>Full DeNovo design will require significantly more rounds and nstruct.</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>If you are docking, runs take about 30 percent longer. (<strong>Default=25</strong>)</td>
+</tr>
+<tr class="even">
+<td><code>-inner_cycle_rounds</code></td>
+<td>Number of times to run the inner minimization protocol after each graft.</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>Higher (2-3) rounds recommended</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>for pack/min/backrub mintypes or if including dock in the protocol. (<strong>Default = 1</strong>)</td>
+</tr>
+<tr class="odd">
+<td><code>-dock_cycle_rounds</code></td>
+<td>Number of rounds for any docking.</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>If you are seeing badly docked structures, increase this value. (<strong>Default=1</strong>)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p><strong>Distance Detection</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th>Option</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>-interface_dis</code></td>
+<td>Interface distance cutoff. Used for repacking of interface, epitope detection, etc. (<strong>Default=8.0</strong>)</td>
+</tr>
+<tr class="even">
+<td><code>-neighbor_dis</code></td>
+<td>Neighbor distance cutoff. Used for repacking after graft, minimization, etc. (<strong>Default=6.0</strong>)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p><strong>Paratope + Epitope</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th>Option</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>-paratope</code></td>
+<td>Use these CDRs as the paratope. Default is all of them. Currently only used for</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>SiteConstraints. Note that these site constraints are only scored docking unless</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td><em>-enable_full_protocol_atom_pair_cst</em> is set (Ex -paratope L1 h1)</td>
+</tr>
+<tr class="even">
+<td><code>-epitope</code></td>
+<td>Use these residues as the antigen epitope. Default is to auto-identify them within the set</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>interface distance at protocol start if epitope constraints are enabled. Currently only used</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>for constraints. PDB Numbering. Optional insertion code. Example: 1A 1B 1B:A.</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>Note that these site constraints are only used during docking unless</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>-enable_full_protocol_atom_pair_cst is set.</td>
+</tr>
+<tr class="odd">
+<td><code>-use_epitope_constraints</code></td>
+<td>Enable use of epitope constraints to add SiteConstraints between the epitope and paratope.</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>Note that paratope constraints are always used. Note that these site constraints are only</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>used during docking unless -global_atom_pair_cst_scoring is set.(<strong>Default = false</strong>)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p><strong>Regional Sequence Design</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th>Option</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>-design_antigen</code></td>
+<td>Design antigen residues during sequence design. Intelligently.</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>Typically, only the neighbor antigen residues of designing cdrs or interfaces</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>will be co-designed. Useful for specific applications.(<strong>Default = false</strong>)</td>
+</tr>
+<tr class="even">
+<td><code>-design_framework</code></td>
+<td>Design framework residues during sequence design. Typically done with only</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>neighbor residues of designing CDRs or during interface minimization.</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>(<strong>Default = false</strong>)</td>
+</tr>
+<tr class="odd">
+<td><code>-conservative_framework_design</code></td>
+<td>If designing Framework positions, use conservative mutations</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>instead of all of them. (<strong>Default=true</strong>)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p><strong>Seq Design Control</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th>Option</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>-resfile</code></td>
+<td>Use a resfile to further limit which residues are packed/designed,</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>and can further limit residue types for design.</td>
+</tr>
+<tr class="odd">
+<td><code>-design_H3_stem</code></td>
+<td>Enable design of the first 2 and last 3 residues of the H3 loop if sequence designing H3.</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>These residues play a role in the extended vs kinked H3 conformation. Designing these</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>residues may negatively effect the overall H3 structure by potentially switching a kinked</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>loop to an extended and vice versa. Rosetta may get it right. But it is off by default</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>to err on the cautious side of design.</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>Sequence designing H3 may be already risky. (<strong>Default=false</strong>)</td>
+</tr>
+<tr class="odd">
+<td><code>-design_proline</code></td>
+<td>Enable proline design. Profiles for proline are very good, but designing them is a bit risky.</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>Enable this if you are feeling daring. (<strong>Default=false</strong>)</td>
+</tr>
+<tr class="odd">
+<td><code>-sample_zero_probs_at</code></td>
+<td>Value for probabilstic design. Probability that a normally zero prob will be chosen as a</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>potential residue each time packer task is called.</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>Increase to increase variablility of positions. (<strong>Default=0</strong>)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p><strong>Profile Stats</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th>Option</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>-seq_design_stats_cutoff</code></td>
+<td>Value for probabilistic -&gt; conservative sequence design switch. If number of total</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>sequences used for probabilistic design for a particular cdr cluster being designed</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>is less than this value, conservative design will occur.</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>More data = better predictability. (<strong>Default=10</strong>)</td>
+</tr>
+<tr class="odd">
+<td><code>-seq_design_profile_samples</code></td>
+<td>If designing using profiles, this is the number of times the profile is sampled each</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>time packing done. Increase this number to increase variability of designs</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>- especially if not using relax as the mintype. (<strong>Default=1</strong>)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p><strong>Constraint Control</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th>Option</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>-dihedral_cst_weight</code></td>
+<td>Weight to use for CDR CircularHarmonic cluster-based or general constraints that</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>are automatically added to each structure and updated after each graft.</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>Set to zero if you don't want to use these constraints.</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>Note that they are not used for the backrub mintype.</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>Overrides weight/patch settings.(<strong>Default = .3</strong>)</td>
+</tr>
+<tr class="even">
+<td><code>-atom_pair_cst_weight</code></td>
+<td>Weight to use for Epitope/Paratope SiteConstraints. Paratope Side contraints are</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>always used. Set to zero to completely abbrogate these constraints. Overrides</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>weight/patch settings.'Real' (<strong>Default = 0.01</strong>)</td>
+</tr>
+<tr class="odd">
+<td><code>-global_dihedral_cst_scoring</code></td>
+<td>Use the dihedral cst score throughout the protocol, including final scoring of the</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>poses instead of just during minimization step (<strong>Default = false</strong>)</td>
+</tr>
+<tr class="odd">
+<td><code>-global_atom_pair_cst_scoring</code></td>
+<td>Use the atom pair cst score throughout the protocol, including final scoring of the</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>poses instead of just during docking. Typically, the scoreterm is set to zero for</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>scorefxns other than docking to decrease bias via loop lengths, relax, etc. It may</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>indeed help to target a particular epitope quicker during monte carlo design if</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>epitope constraints are in use, as well for filtering final models on score</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>towards a particular epitope if docking. (<strong>Default = true</strong>)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p><strong>Fine Control</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th>Option</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>-idealize_graft_cdrs</code></td>
+<td>Idealize the CDR before grafting. May help or hinder. (<strong>Default = false</strong>)</td>
+</tr>
+<tr class="even">
+<td><code>-add_backrub_pivots</code></td>
+<td>'Additional backrub pivot residues if running backrub as the MinType. PDB Numbering.</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>Optional insertion code. Example: 1A 1B 1B:A.</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>Can also specify ranges: 1A-10:A. Note no spaces in the range.</td>
+</tr>
+<tr class="odd">
+<td><code>-inner_kt</code></td>
+<td>KT used in the inner min monte carlo after each graft. (<strong>default = 1.0)</strong>,</td>
+</tr>
+<tr class="even">
+<td><code>-outer_kt</code></td>
+<td>KT used for the outer graft Monte Carlo. Each graft step will use this value (<strong>Default = 1.0</strong>),</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p><strong>Outlier Control</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th>Option</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>-use_outliers</code></td>
+<td>Include outlier data for GraftDesign, profile-based sequence design stats, and cluster-based</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>dihedral constraints. Outliers are defined as having a dihedral distance of &gt; 40 degrees and</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>an RMSD of &gt;1.5 A to the cluster center. Use to increase sampling of small or rare clusters.</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>(<strong>Default=false</strong>)</td>
+</tr>
+<tr class="odd">
+<td><code>-use_H3_graft_outliers</code></td>
+<td>Include outliers when grafting H3. H3 does not cluster well, so most structures have</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>high dihedral distance and RMSD to the cluster center. Due to this, cluster-based</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>dihedral constraints for H3 are not used. Sequence profiles can be used for clusters,</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>but not usually. (<strong>Default = true</strong>)</td>
+</tr>
+<tr class="odd">
+<td><code>-use_only_H3_kinked</code></td>
+<td>Remove any non-kinked CDRs from the CDRSet if grafting H3. For now, the match is based</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>on the ramachandran area of the last two residues of the H3. Kinked in this case is defined</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>as having AB or DB regions at the end. Will be improved for detection (<strong>Default = false</strong>)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p><strong>Protocol Steps</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th>Option</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>-design_protocol</code></td>
+<td>Set the main protocol to use.</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>Note that deterministic is currently only available for the grafting of one CDR.</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>(Options = gen_mc, even_cluster_mc, even_length_cluster_mc, deterministic_graft)</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>(<strong>Default=even_cluster_mc</strong>)</td>
+</tr>
+<tr class="odd">
+<td><code>-run_snugdock</code></td>
+<td>Run snugdock on each ensemble after designing. (<strong>Default=false</strong>)</td>
+</tr>
+<tr class="even">
+<td><code>-run_relax</code></td>
+<td>Run Dualspace Relax on each ensemble after designing (after snugdock if run).</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>Also output pre-relaxed structures (<strong>Default = false</strong>)</td>
+</tr>
+<tr class="even">
+<td><code>-run_interface_analyzer</code></td>
+<td>Run the Interface Analyzer and add the information to the resulting score function</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>for each top design output. (<strong>Default = true</strong>)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p><strong>Memory management / CDRSet caching</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th>Option</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>-high_mem_mode</code></td>
+<td>If false, we load the CDRSet (CDRs loaded from the database that could be grafted) on-the-fly</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>for a CDR if it has more than 50 graft-design members. If true, then we cache the CDRSet</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>before the start of the protocol. Typically, this will really only to come into play when</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>designing all CDRs. For de-novo design of 5/6 CDRs, without limiting the CDRSet in the</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>instructions file, you will need 3-4 gb per process for this option. (<strong>default = false</strong>)</td>
+</tr>
+<tr class="even">
+<td><code>-cdr_set_cache_limit</code></td>
+<td>If high_mem_mode is false, this is the limit of CDRSet cacheing we do before we begin load</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>them on-the-fly instead. If high_mem_mode is true, then we ignore this setting. If you have</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>extremely low memory per-process, lower this number (<strong>default = 300</strong>)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p><strong>Benchmarking</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th>Option</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>-random_start</code></td>
+<td>Start graft design (currently) with a new set of CDRs from the CDRSets</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>as to not bias the run with native CDRs. (<strong>Default=false</strong>)</td>
+</tr>
+<tr class="odd">
+<td><code>-remove_antigen</code></td>
+<td>Remove the antigen from the pose before doing any design on it (<strong>Default = false</strong>)</td>
+</tr>
+<tr class="even">
+<td><code>-add_graft_log_to_pdb</code></td>
+<td>Add the full graft log to the output pose.</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>Must also pass -pdb_comments option. (<strong>Default = 'true'</strong>)</td>
+</tr>
+</tbody>
+</table>

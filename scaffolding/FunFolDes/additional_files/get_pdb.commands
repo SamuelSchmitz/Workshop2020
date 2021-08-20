@@ -1,0 +1,15 @@
+# Download the PDB database
+cd $DATABASES
+mkdir pdb
+rsync -rlpt -v -z --delete --files-from=sample.txt --port=33444 rsync.rcsb.org::ftp_data/structures/divided/pdb/ pdb/
+
+# Format the database
+find pdb -name "*ent.gz" > db.list
+createPDS --type target --pdbList db.list
+find pdb -name "*pds" > master.list
+
+# Format the query structure
+createPDS --type query --pdb motif.pdb
+
+# Search
+master --query motif.pds --targetList master.list --rmsdCut 5 --matchOut motif.master.list

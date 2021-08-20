@@ -1,0 +1,5 @@
+-out:pdb 
+-constraints:cst_file 4m5y_bulged.constraints
+-constraints:cst_weight 1
+-constraints:viol
+-constraints:viol_level 101

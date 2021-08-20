@@ -1,0 +1,26 @@
+A,50     VAL  V   0.00   4.32   1.000*K
+A,52     MET  M   4.32   4.32   1.000*M
+A,53     ILE  I   4.32   4.32   1.000*I
+A,56     ALA  A   4.32   4.32   1.000*A
+A,57     LYS  K   4.32   4.32   1.000*K
+A,62     PHE  F   4.32   4.32   1.000*F
+A,67     LEU  L   4.32   4.32   1.000*L
+A,68     HIS  H   0.00   4.32   1.000*D
+A,70     GLN  Q   4.32   4.32   1.000*Q
+A,71     VAL  V   3.75   3.85   0.100*A,0.900*V
+A,74     LEU  L   4.32   4.32   1.000*L
+A,75     GLU  E   0.00   3.85   0.100*K,0.900*Q
+A,233    ASP  D   0.00   4.32   1.000*E
+A,234    LEU  L   4.32   4.32   1.000*L
+A,237    GLU  E   4.32   4.32   1.000*E
+A,238    MET  M   4.32   4.32   1.000*M
+
+total            51.29  68.21  75.20% recovery
+
+74.38% by count
+
+Significance calculation
+##       Native AAs   Nonnative AAs
+Design   119.0        41.0         
+Random   9.7          150.3        
+This result is significant with a result of 3.95e-40
